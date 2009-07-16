@@ -1,5 +1,5 @@
 Name:		cppcheck
-Version:	1.31
+Version:	1.34
 Release:	1%{?dist}
 Summary:	A tool for static C/C++ code analysis
 Group:		Development/Languages
@@ -7,8 +7,6 @@ License:	GPLv3+
 URL:		http://cppcheck.wiki.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
-
-BuildRequires:	gcc-c++
 
 %description
 This program tries to detect bugs that your C/C++ compiler don't see.
@@ -53,5 +51,8 @@ rm -rf %{buildroot}
 %{_bindir}/cppcheck
 
 %changelog
+* Thu Jul 16 2009 Jussi Lehtola <jussi.lehtola@iki.fi> - 1.34-1
+- Update to 1.34.
+
 * Mon Apr 27 2009 Jussi Lehtola <jussi.lehtola@iki.fi> - 1.31-1
 - First release.
