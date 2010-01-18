@@ -1,5 +1,5 @@
 Name:		cppcheck
-Version:	1.39
+Version:	1.40
 Release:	1%{?dist}
 Summary:	A tool for static C/C++ code analysis
 Group:		Development/Languages
@@ -35,6 +35,10 @@ for file in readme.txt; do
  mv $file.new $file
 done
 
+# Fix permissions
+find -name "*.cpp" -exec chmod 644 {} \;
+find -name "*.vcproj" -exec chmod 644 {} \;
+
 %build
 make CXXFLAGS="%{optflags}" %{?_smp_mflags}
 
@@ -51,6 +55,9 @@ rm -rf %{buildroot}
 %{_bindir}/cppcheck
 
 %changelog
+* Mon Jan 18 2010 Jussi Lehtola <jussilehtola@fedoraproject.org> - 1.40-1
+- Update to 1.40.
+
 * Sun Dec 27 2009 Jussi Lehtola <jussilehtola@fedoraproject.org> - 1.39-1
 - Update to 1.39.
 
