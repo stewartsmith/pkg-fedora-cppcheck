@@ -1,5 +1,5 @@
 Name:		cppcheck
-Version:	1.42
+Version:	1.43
 Release:	1%{?dist}
 Summary:	A tool for static C/C++ code analysis
 Group:		Development/Languages
@@ -29,7 +29,7 @@ for file in COPYING readme.txt; do
 done
 
 # Fix end of line encodings
-for file in readme.txt; do
+for file in readme.txt test/test.vcproj test/test.vcxproj{,.filters}; do
  sed -e 's|\r||g' $file > $file.new && \
  touch -r $file $file.new && \
  mv $file.new $file
@@ -55,6 +55,9 @@ rm -rf %{buildroot}
 %{_bindir}/cppcheck
 
 %changelog
+* Sun May 9 2010 Jussi Lehtola <jussilehtola@fedoraproject.org> - 1.43-1
+- Update to 1.43.
+
 * Wed Mar 10 2010 Jussi Lehtola <jussilehtola@fedoraproject.org> - 1.42-1
 - Update to 1.42.
 
