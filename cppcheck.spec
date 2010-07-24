@@ -1,5 +1,5 @@
 Name:		cppcheck
-Version:	1.43
+Version:	1.44
 Release:	1%{?dist}
 Summary:	A tool for static C/C++ code analysis
 Group:		Development/Languages
@@ -22,8 +22,8 @@ various compiler extensions, inline assembly code, etc.
 %prep
 %setup -q
 # Convert text files to UTF-8
-for file in COPYING readme.txt; do
- iconv -f ASCII -t utf-8 $file > $file.new && \
+for file in COPYING readme.txt test/tinyxml/tinystr.cpp test/tinyxml/changes.txt; do
+ iconv -f ISO-8859-15 -t utf-8 $file > $file.new && \
  touch -r $file $file.new && \
  mv $file.new $file
 done
@@ -55,6 +55,9 @@ rm -rf %{buildroot}
 %{_bindir}/cppcheck
 
 %changelog
+* Sat Jul 24 2010 Jussi Lehtola <jussilehtola@fedoraproject.org> - 1.44-1
+- Update to 1.44.
+
 * Sun May 9 2010 Jussi Lehtola <jussilehtola@fedoraproject.org> - 1.43-1
 - Update to 1.43.
 
