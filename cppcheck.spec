@@ -8,6 +8,8 @@ URL:		http://cppcheck.wiki.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
+BuildRequires:	pcre-devel
+
 %description
 This program tries to detect bugs that your C/C++ compiler don't see.
 The goal is no false positives.
