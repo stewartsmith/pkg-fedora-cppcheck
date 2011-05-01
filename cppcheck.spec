@@ -1,6 +1,6 @@
 Name:		cppcheck
 Version:	1.48
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
@@ -9,6 +9,7 @@ Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires:	pcre-devel
+BuildRequires:	tinyxml-devel
 
 %description
 This program tries to detect bugs that your C/C++ compiler don't see.
@@ -23,40 +24,37 @@ various compiler extensions, inline assembly code, etc.
 
 %prep
 %setup -q
-# Convert text files to UTF-8
-for file in COPYING readme.txt test/tinyxml/tinystr.cpp test/tinyxml/changes.txt; do
- iconv -f ISO-8859-15 -t utf-8 $file > $file.new && \
- touch -r $file $file.new && \
- mv $file.new $file
-done
 
-# Fix end of line encodings
-for file in readme.txt test/test.vcproj test/test.vcxproj{,.filters}; do
- sed -e 's|\r||g' $file > $file.new && \
- touch -r $file $file.new && \
- mv $file.new $file
-done
-
-# Fix permissions
-find -name "*.cpp" -exec chmod 644 {} \;
-find -name "*.vcproj" -exec chmod 644 {} \;
+# Make sure bundled tinyxml is not used
+rm -r externals/tinyxml
 
 %build
-make CXXFLAGS="%{optflags}" %{?_smp_mflags}
+# TINYXML= prevents use of bundled tinyxml
+make CXXFLAGS="%{optflags} -DNDEBUG -DHAVE_RULES" TINYXML= LDFLAGS=-ltinyxml \
+    %{?_smp_mflags}
 
 %install
 rm -rf %{buildroot}
 install -D -p -m 755 cppcheck %{buildroot}%{_bindir}/cppcheck
+
+%check
+make CXXFLAGS="%{optflags} -DNDEBUG -DHAVE_RULES" TINYXML= LDFLAGS=-ltinyxml \
+    %{?_smp_mflags} check
 
 %clean
 rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%doc COPYING readme.txt test/
+%doc COPYING
 %{_bindir}/cppcheck
 
 %changelog
+* Sat Apr 30 2011 Ville Skyttä <ville.skytta@iki.fi> - 1.48-2
+- Build with system tinyxml and support for rules.
+- Run test suite during build, don't include its sources in docs.
+- Drop readme.txt from docs, it doesn't contain useful info after installed.
+
 * Fri Apr 15 2011 Jussi Lehtola <jussilehtola@fedoraproject.org> - 1.48-1
 - Update to 1.48.
 
