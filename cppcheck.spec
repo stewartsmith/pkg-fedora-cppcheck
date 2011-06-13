@@ -1,6 +1,6 @@
 Name:		cppcheck
-Version:	1.48
-Release:	2%{?dist}
+Version:	1.49
+Release:	1%{?dist}
 Summary:	A tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
@@ -30,16 +30,14 @@ rm -r externals/tinyxml
 
 %build
 # TINYXML= prevents use of bundled tinyxml
-make CXXFLAGS="%{optflags} -DNDEBUG -DHAVE_RULES" TINYXML= LDFLAGS=-ltinyxml \
-    %{?_smp_mflags}
+make CXXFLAGS="%{optflags} -DNDEBUG -DHAVE_RULES" TINYXML= LDFLAGS="-ltinyxml -lpcre" %{?_smp_mflags}
 
 %install
 rm -rf %{buildroot}
 install -D -p -m 755 cppcheck %{buildroot}%{_bindir}/cppcheck
 
 %check
-make CXXFLAGS="%{optflags} -DNDEBUG -DHAVE_RULES" TINYXML= LDFLAGS=-ltinyxml \
-    %{?_smp_mflags} check
+make CXXFLAGS="%{optflags} -DNDEBUG -DHAVE_RULES" TINYXML= LDFLAGS="-ltinyxml -lpcre" %{?_smp_mflags} check
 
 %clean
 rm -rf %{buildroot}
@@ -50,6 +48,9 @@ rm -rf %{buildroot}
 %{_bindir}/cppcheck
 
 %changelog
+* Mon Jun 13 2011 Jussi Lehtola <jussilehtola@fedoraproject.org> - 1.49-1
+- Update to 1.49.
+
 * Sat Apr 30 2011 Ville Skyttä <ville.skytta@iki.fi> - 1.48-2
 - Build with system tinyxml and support for rules.
 - Run test suite during build, don't include its sources in docs.
