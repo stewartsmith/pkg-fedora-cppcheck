@@ -6,6 +6,8 @@ Group:		Development/Languages
 License:	GPLv3+
 URL:		http://cppcheck.wiki.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
+# Fix BZ #730580
+Patch0:		cppcheck-1.50-preprocessor.patch
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires:	pcre-devel
@@ -24,6 +26,7 @@ various compiler extensions, inline assembly code, etc.
 
 %prep
 %setup -q
+%patch0 -p1
 
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml

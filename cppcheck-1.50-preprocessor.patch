@@ -1,0 +1,43 @@
+diff -up cppcheck-1.50/lib/preprocessor.cpp.orig cppcheck-1.50/lib/preprocessor.cpp
+--- cppcheck-1.50/lib/preprocessor.cpp.orig	2011-08-14 10:45:53.000000000 +0300
++++ cppcheck-1.50/lib/preprocessor.cpp	2011-08-19 10:17:20.240800771 +0300
+@@ -1716,8 +1716,10 @@ std::string Preprocessor::getcode(const 
+             continue;
+         }
+ 
+-        std::string def = getdef(line, true);
+-        std::string ndef = getdef(line, false);
++        const std::string def = getdef(line, true);
++        const std::string ndef = getdef(line, false);
++
++        const bool emptymatch = matching_ifdef.empty() | matched_ifdef.empty();
+ 
+         if (line.compare(0, 8, "#define ") == 0)
+         {
+@@ -1742,7 +1744,7 @@ std::string Preprocessor::getcode(const 
+             }
+         }
+ 
+-        else if (line.compare(0, 7, "#elif !") == 0)
++        else if (!emptymatch && line.compare(0, 7, "#elif !") == 0)
+         {
+             if (matched_ifdef.back())
+             {
+@@ -1758,7 +1760,7 @@ std::string Preprocessor::getcode(const 
+             }
+         }
+ 
+-        else if (line.compare(0, 6, "#elif ") == 0)
++        else if (!emptymatch && line.compare(0, 6, "#elif ") == 0)
+         {
+             if (matched_ifdef.back())
+             {
+@@ -1786,7 +1788,7 @@ std::string Preprocessor::getcode(const 
+             matched_ifdef.push_back(matching_ifdef.back());
+         }
+ 
+-        else if (line == "#else")
++        else if (!emptymatch && line == "#else")
+         {
+             if (! matched_ifdef.empty())
+                 matching_ifdef.back() = ! matched_ifdef.back();
