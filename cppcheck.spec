@@ -1,6 +1,6 @@
 Name:		cppcheck
 Version:	1.50
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
@@ -33,14 +33,22 @@ rm -r externals/tinyxml
 
 %build
 # TINYXML= prevents use of bundled tinyxml
+%if 0%{?rhel} == 4
+make CXXFLAGS="%{optflags} -I%{_includedir}/pcre -DNDEBUG -DHAVE_RULES" TINYXML= LDFLAGS="-ltinyxml -lpcre" %{?_smp_mflags}
+%else
 make CXXFLAGS="%{optflags} -DNDEBUG -DHAVE_RULES" TINYXML= LDFLAGS="-ltinyxml -lpcre" %{?_smp_mflags}
+%endif
 
 %install
 rm -rf %{buildroot}
 install -D -p -m 755 cppcheck %{buildroot}%{_bindir}/cppcheck
 
 %check
+%if 0%{?rhel} == 4
+make CXXFLAGS="%{optflags} -I%{_includedir}/pcre -DNDEBUG -DHAVE_RULES" TINYXML= LDFLAGS="-ltinyxml -lpcre" %{?_smp_mflags} check
+%else
 make CXXFLAGS="%{optflags} -DNDEBUG -DHAVE_RULES" TINYXML= LDFLAGS="-ltinyxml -lpcre" %{?_smp_mflags} check
+%endif
 
 %clean
 rm -rf %{buildroot}
@@ -51,6 +59,9 @@ rm -rf %{buildroot}
 %{_bindir}/cppcheck
 
 %changelog
+* Fri Aug 19 2011 Jussi Lehtola <jussilehtola@fedoraproject.org> - 1.50-2
+- Fix build on EPEL-4.
+
 * Sun Aug 14 2011 Jussi Lehtola <jussilehtola@fedoraproject.org> - 1.50-1
 - Update to 1.50.
 
