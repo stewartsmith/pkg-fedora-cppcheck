@@ -1,13 +1,11 @@
 Name:		cppcheck
-Version:	1.50
-Release:	2%{?dist}
+Version:	1.51
+Release:	1%{?dist}
 Summary:	A tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
 URL:		http://cppcheck.wiki.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
-# Fix BZ #730580
-Patch0:		cppcheck-1.50-preprocessor.patch
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires:	pcre-devel
@@ -26,7 +24,6 @@ various compiler extensions, inline assembly code, etc.
 
 %prep
 %setup -q
-%patch0 -p1
 
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
@@ -59,6 +56,9 @@ rm -rf %{buildroot}
 %{_bindir}/cppcheck
 
 %changelog
+* Sun Oct 09 2011 Jussi Lehtola <jussilehtola@fedoraproject.org> - 1.51-1
+- Update to 1.51.
+
 * Fri Aug 19 2011 Jussi Lehtola <jussilehtola@fedoraproject.org> - 1.50-2
 - Fix build on EPEL-4.
 
