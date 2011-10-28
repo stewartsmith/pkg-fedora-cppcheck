@@ -1,7 +1,7 @@
 Name:		cppcheck
 Version:	1.51
-Release:	1%{?dist}
-Summary:	A tool for static C/C++ code analysis
+Release:	2%{?dist}
+Summary:	Tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
 URL:		http://cppcheck.wiki.sourceforge.net/
@@ -10,16 +10,15 @@ BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires:	pcre-devel
 BuildRequires:	tinyxml-devel
+BuildRequires:	docbook-style-xsl
+BuildRequires:	libxslt
 
 %description
-This program tries to detect bugs that your C/C++ compiler don't see.
-The goal is no false positives.
-
-Your compiler can detect many problems that cppcheck don't try to detect.
-We recommend that you enable as many warnings as possible in your compiler.
-
-Cppcheck is versatile. You can check non-standard code that includes
-various compiler extensions, inline assembly code, etc.
+Cppcheck is a static analysis tool for C/C++ code. Unlike C/C++
+compilers and many other analysis tools it does not detect syntax
+errors in the code. Cppcheck primarily detects the types of bugs that
+the compilers normally do not detect. The goal is to detect only real
+errors in the code (i.e. have zero false positives).
 
 
 %prep
@@ -30,32 +29,37 @@ rm -r externals/tinyxml
 
 %build
 # TINYXML= prevents use of bundled tinyxml
-%if 0%{?rhel} == 4
-make CXXFLAGS="%{optflags} -I%{_includedir}/pcre -DNDEBUG -DHAVE_RULES" TINYXML= LDFLAGS="-ltinyxml -lpcre" %{?_smp_mflags}
-%else
-make CXXFLAGS="%{optflags} -DNDEBUG -DHAVE_RULES" TINYXML= LDFLAGS="-ltinyxml -lpcre" %{?_smp_mflags}
-%endif
+CXXFLAGS="%{optflags} -DNDEBUG $(pcre-config --cflags)" \
+    LDFLAGS="$RPM_LD_FLAGS" LIBS=-ltinyxml make TINYXML= \
+    DB2MAN=%{_datadir}/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl \
+    %{?_smp_mflags} all man
+xsltproc --nonet -o man/manual.html \
+    %{_datadir}/sgml/docbook/xsl-stylesheets/xhtml/docbook.xsl \
+    man/manual.docbook
 
 %install
 rm -rf %{buildroot}
 install -D -p -m 755 cppcheck %{buildroot}%{_bindir}/cppcheck
+install -D -p -m 644 cppcheck.1 %{buildroot}%{_mandir}/man1/cppcheck.1
 
 %check
-%if 0%{?rhel} == 4
-make CXXFLAGS="%{optflags} -I%{_includedir}/pcre -DNDEBUG -DHAVE_RULES" TINYXML= LDFLAGS="-ltinyxml -lpcre" %{?_smp_mflags} check
-%else
-make CXXFLAGS="%{optflags} -DNDEBUG -DHAVE_RULES" TINYXML= LDFLAGS="-ltinyxml -lpcre" %{?_smp_mflags} check
-%endif
+make TINYXML= check
 
 %clean
 rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%doc COPYING
+%doc AUTHORS COPYING man/manual.html
 %{_bindir}/cppcheck
+%{_mandir}/man1/cppcheck.1*
 
 %changelog
+* Wed Oct 26 2011 Ville Skyttä <ville.skytta@iki.fi> - 1.51-2
+- Include man page and more other docs.
+- Build with $RPM_LD_FLAGS.
+- Improve summary and description.
+
 * Sun Oct 09 2011 Jussi Lehtola <jussilehtola@fedoraproject.org> - 1.51-1
 - Update to 1.51.
 
