@@ -1,11 +1,13 @@
 Name:		cppcheck
 Version:	1.52
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
 URL:		http://cppcheck.wiki.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
+# Add missing includes
+Patch0:		cppcheck-1.52-include.patch
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires:	pcre-devel
@@ -23,6 +25,7 @@ errors in the code (i.e. have zero false positives).
 
 %prep
 %setup -q
+%patch0 -p1 -b .include
 
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
@@ -55,6 +58,9 @@ rm -rf %{buildroot}
 %{_mandir}/man1/cppcheck.1*
 
 %changelog
+* Thu Jan 05 2012 Jussi Lehtola <jussilehtola@fedoraproject.org> - 1.52-2
+- Add missing includes (fix FTBFS in rawhide).
+
 * Sun Dec 11 2011 Jussi Lehtola <jussilehtola@fedoraproject.org> - 1.52-1
 - Update to 1.52.
 
