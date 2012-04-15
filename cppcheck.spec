@@ -1,5 +1,5 @@
 Name:		cppcheck
-Version:	1.53
+Version:	1.54
 Release:	1%{?dist}
 Summary:	Tool for static C/C++ code analysis
 Group:		Development/Languages
@@ -55,6 +55,9 @@ rm -rf %{buildroot}
 %{_mandir}/man1/cppcheck.1*
 
 %changelog
+* Sun Apr 15 2012 Jussi Lehtola <jussilehtola@fedoraproject.org> - 1.54-1
+- Update to 1.54.
+
 * Sat Feb 11 2012 Jussi Lehtola <jussilehtola@fedoraproject.org> - 1.53-1
 - Update to 1.53.
 
