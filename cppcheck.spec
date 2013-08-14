@@ -1,6 +1,6 @@
 Name:		cppcheck
-Version:	1.60.1
-Release:	2%{?dist}
+Version:	1.61
+Release:	1%{?dist}
 Summary:	Tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
@@ -9,7 +9,7 @@ Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires:	pcre-devel
-BuildRequires:	tinyxml-devel
+BuildRequires:	tinyxml2-devel
 BuildRequires:	docbook-style-xsl
 BuildRequires:	libxslt
 
@@ -23,14 +23,13 @@ errors in the code (i.e. have zero false positives).
 
 %prep
 %setup -q
-
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
 
 %build
 # TINYXML= prevents use of bundled tinyxml
 CXXFLAGS="%{optflags} -DNDEBUG $(pcre-config --cflags)" \
-    LDFLAGS="$RPM_LD_FLAGS" LIBS=-ltinyxml make TINYXML= \
+    LDFLAGS="$RPM_LD_FLAGS" LIBS=-ltinyxml2 make TINYXML= \
     DB2MAN=%{_datadir}/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl \
     %{?_smp_mflags} all man
 xsltproc --nonet -o man/manual.html \
@@ -55,6 +54,9 @@ rm -rf %{buildroot}
 %{_mandir}/man1/cppcheck.1*
 
 %changelog
+* Sat Aug 10 2013 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.61-1
+- Update to 1.61.
+
 * Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.60.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
