@@ -1,6 +1,6 @@
 Name:		cppcheck
 Version:	1.63
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
@@ -30,6 +30,7 @@ rm -r externals/tinyxml
 # TINYXML= prevents use of bundled tinyxml
 CXXFLAGS="%{optflags} -DNDEBUG $(pcre-config --cflags)" \
     LDFLAGS="$RPM_LD_FLAGS" LIBS=-ltinyxml2 make TINYXML= \
+    CFGDIR=%{_datadir}/%{name} \
     DB2MAN=%{_datadir}/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl \
     %{?_smp_mflags} all man
 xsltproc --nonet -o man/manual.html \
@@ -41,6 +42,12 @@ rm -rf %{buildroot}
 install -D -p -m 755 cppcheck %{buildroot}%{_bindir}/cppcheck
 install -D -p -m 644 cppcheck.1 %{buildroot}%{_mandir}/man1/cppcheck.1
 
+# Install cfg files
+cd cfg
+for f in *; do
+    install -D -p -m 644 $f %{buildroot}%{_datadir}/cppcheck/$f
+done
+
 %check
 make TINYXML= check
 
@@ -50,10 +57,14 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING man/manual.html
+%{_datadir}/cppcheck/
 %{_bindir}/cppcheck
 %{_mandir}/man1/cppcheck.1*
 
 %changelog
+* Tue Jan 07 2014 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.63-2
+- Include cfg files as well.
+
 * Tue Jan 07 2014 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.63-1
 - Update to 1.63.
 
