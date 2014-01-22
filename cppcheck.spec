@@ -1,6 +1,6 @@
 Name:		cppcheck
 Version:	1.63
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	Tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
@@ -31,6 +31,7 @@ rm -r externals/tinyxml
 CXXFLAGS="%{optflags} -DNDEBUG $(pcre-config --cflags)" \
     LDFLAGS="$RPM_LD_FLAGS" LIBS=-ltinyxml2 make TINYXML= \
     CFGDIR=%{_datadir}/%{name} \
+    HAVE_RULES=yes \
     DB2MAN=%{_datadir}/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl \
     %{?_smp_mflags} all man
 xsltproc --nonet -o man/manual.html \
@@ -62,6 +63,9 @@ rm -rf %{buildroot}
 %{_mandir}/man1/cppcheck.1*
 
 %changelog
+* Wed Jan 22 2014 François Cami <fcami@fedoraproject.org> - 1.63-3
+- Add HAVE_RULES=yes (#1056733).
+
 * Tue Jan 07 2014 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.63-2
 - Include cfg files as well.
 
