@@ -9,7 +9,7 @@ Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires:	pcre-devel
-BuildRequires:	tinyxml2-devel
+BuildRequires:	tinyxml2-devel >= 2.1.0
 BuildRequires:	docbook-style-xsl
 BuildRequires:	libxslt
 
@@ -50,7 +50,14 @@ for f in *; do
 done
 
 %check
-make TINYXML= check
+# Config is not available in the system-wide directory - delete executables and recompile
+find . -name \*.o -delete
+CXXFLAGS="%{optflags} -DNDEBUG $(pcre-config --cflags)" \
+    LDFLAGS="$RPM_LD_FLAGS" LIBS=-ltinyxml2 make TINYXML= \
+    CFGDIR=$(pwd)/cfg \
+    HAVE_RULES=yes \
+    DB2MAN=%{_datadir}/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl \
+    %{?_smp_mflags} check
 
 %clean
 rm -rf %{buildroot}
