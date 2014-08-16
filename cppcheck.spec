@@ -1,6 +1,6 @@
 Name:		cppcheck
 Version:	1.65
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	Tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
@@ -70,6 +70,9 @@ rm -rf %{buildroot}
 %{_mandir}/man1/cppcheck.1*
 
 %changelog
+* Sat Aug 16 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.65-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.65-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
