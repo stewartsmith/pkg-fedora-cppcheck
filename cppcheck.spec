@@ -1,6 +1,6 @@
 Name:		cppcheck
-Version:	1.63
-Release:	3%{?dist}
+Version:	1.70
+Release:	1%{?dist}
 Summary:	Tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
@@ -9,7 +9,7 @@ Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires:	pcre-devel
-BuildRequires:	tinyxml2-devel
+BuildRequires:	tinyxml2-devel >= 2.1.0
 BuildRequires:	docbook-style-xsl
 BuildRequires:	libxslt
 
@@ -31,6 +31,7 @@ rm -r externals/tinyxml
 CXXFLAGS="%{optflags} -DNDEBUG $(pcre-config --cflags)" \
     LDFLAGS="$RPM_LD_FLAGS" LIBS=-ltinyxml2 make TINYXML= \
     CFGDIR=%{_datadir}/%{name} \
+    HAVE_RULES=yes \
     DB2MAN=%{_datadir}/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl \
     %{?_smp_mflags} all man
 xsltproc --nonet -o man/manual.html \
@@ -49,7 +50,14 @@ for f in *; do
 done
 
 %check
-make TINYXML= check
+# Config is not available in the system-wide directory - delete executables and recompile
+find . -name \*.o -delete
+CXXFLAGS="%{optflags} -DNDEBUG $(pcre-config --cflags)" \
+    LDFLAGS="$RPM_LD_FLAGS" LIBS=-ltinyxml2 make TINYXML= \
+    CFGDIR=$(pwd)/cfg \
+    HAVE_RULES=yes \
+    DB2MAN=%{_datadir}/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl \
+    %{?_smp_mflags} check
 
 %clean
 rm -rf %{buildroot}
@@ -62,8 +70,35 @@ rm -rf %{buildroot}
 %{_mandir}/man1/cppcheck.1*
 
 %changelog
-* Mon Jun 30 2014 Matěj Cepl <mcepl@redhat.com> - 1.63-3
-- Bump release for new libtinyxml
+* Mon Sep 21 2015 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.70-1
+- Update to 1.70.
+
+* Wed Jun 17 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.68-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
+
+* Sat May 02 2015 Kalev Lember <kalevlember@gmail.com> - 1.68-2
+- Rebuilt for GCC 5 C++11 ABI change
+
+* Sat Jan 03 2015 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.68-1
+- Update to 1.68.
+
+* Mon Dec 01 2014 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.67-1
+- Update to 1.67.
+
+* Sat Aug 23 2014 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.66-1
+- Update to 1.66.
+
+* Sat Aug 16 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.65-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
+
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.65-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
+* Tue May 13 2014 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.65-1
+- Update to 1.65.
+
+* Wed Jan 22 2014 François Cami <fcami@fedoraproject.org> - 1.63-3
+- Add HAVE_RULES=yes (#1056733).
 
 * Tue Jan 07 2014 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.63-2
 - Include cfg files as well.
