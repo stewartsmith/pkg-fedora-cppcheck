@@ -1,17 +1,28 @@
 Name:		cppcheck
 Version:	1.70
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
 URL:		http://cppcheck.wiki.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
+Source1:        cppcheck.desktop
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
+
+# Use system tinyxml2
+Patch0:         cppcheck-1.70-tinyxml.patch
+# Fix location of translations
+Patch1:         cppcheck-1.70-translations.patch
+# Fix library install suffix
+Patch2:         cppcheck-1.70-libsuffix.patch
 
 BuildRequires:	pcre-devel
 BuildRequires:	tinyxml2-devel >= 2.1.0
 BuildRequires:	docbook-style-xsl
 BuildRequires:	libxslt
+BuildRequires:  qt4-devel
+BuildRequires:  cmake
+BuildRequires:  desktop-file-utils
 
 %description
 Cppcheck is a static analysis tool for C/C++ code. Unlike C/C++
@@ -20,38 +31,52 @@ errors in the code. Cppcheck primarily detects the types of bugs that
 the compilers normally do not detect. The goal is to detect only real
 errors in the code (i.e. have zero false positives).
 
+%package gui
+Summary:        Graphical user interface for cppcheck
+Group:          Applications/Engineering
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description gui
+This package contains the graphical user interface for cppcheck.
+
 
 %prep
 %setup -q
+%patch0 -p1 -b .tinyxml
+%patch1 -p1 -b .translations
+%patch2 -p1 -b .libsuffix
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
 
 %build
-# TINYXML= prevents use of bundled tinyxml
-CXXFLAGS="%{optflags} -DNDEBUG $(pcre-config --cflags)" \
-    LDFLAGS="$RPM_LD_FLAGS" LIBS=-ltinyxml2 make TINYXML= \
-    CFGDIR=%{_datadir}/%{name} \
-    HAVE_RULES=yes \
-    DB2MAN=%{_datadir}/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl \
-    %{?_smp_mflags} all man
+# Manuals
+make DB2MAN=%{_datadir}/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl man 
 xsltproc --nonet -o man/manual.html \
     %{_datadir}/sgml/docbook/xsl-stylesheets/xhtml/docbook.xsl \
     man/manual.docbook
 
+# Binaries
+mkdir objdir-%{_target_platform}
+cd objdir-%{_target_platform}
+# Upstream doesn't support shared libraries (unversioned solib)
+%cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_GUI=1 -DBUILD_SHARED_LIBS:BOOL=OFF
+
 %install
 rm -rf %{buildroot}
-install -D -p -m 755 cppcheck %{buildroot}%{_bindir}/cppcheck
+make -C objdir-%{_target_platform} DESTDIR=%{buildroot} install
 install -D -p -m 644 cppcheck.1 %{buildroot}%{_mandir}/man1/cppcheck.1
 
-# Install cfg files
-cd cfg
-for f in *; do
-    install -D -p -m 644 $f %{buildroot}%{_datadir}/cppcheck/$f
-done
+# Don't ship devel stuff
+rm -rf %{buildroot}%{_includedir}/CppCheck
+rm %{buildroot}%{_libdir}/libCppCheck.*
+
+# Install desktop file
+desktop-file-install --dir=%{buildroot}%{_datadir}/applications %{SOURCE1}
+# Install logo
+install -D -p -m 644 gui/icon.png %{buildroot}%{_datadir}/pixmaps/cppcheck.png
 
 %check
-# Config is not available in the system-wide directory - delete executables and recompile
-find . -name \*.o -delete
+# CMake build doesn't have check...
 CXXFLAGS="%{optflags} -DNDEBUG $(pcre-config --cflags)" \
     LDFLAGS="$RPM_LD_FLAGS" LIBS=-ltinyxml2 make TINYXML= \
     CFGDIR=$(pwd)/cfg \
@@ -63,13 +88,21 @@ CXXFLAGS="%{optflags} -DNDEBUG $(pcre-config --cflags)" \
 rm -rf %{buildroot}
 
 %files
-%defattr(-,root,root,-)
 %doc AUTHORS COPYING man/manual.html
-%{_datadir}/cppcheck/
+%{_datadir}/CppCheck/
 %{_bindir}/cppcheck
 %{_mandir}/man1/cppcheck.1*
 
+%files gui
+%{_bindir}/cppcheck-gui
+%{_datadir}/applications/cppcheck.desktop
+%{_datadir}/pixmaps/cppcheck.png
+
+
 %changelog
+* Thu Nov 5 2015 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.70-2
+- Include GUI (BZ #1278318).
+
 * Mon Sep 21 2015 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.70-1
 - Update to 1.70.
 

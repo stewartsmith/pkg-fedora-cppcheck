@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=CppCheck
+GenericName=C++ Source code analyzer
+Comment=Perform static code analysis on your C++ programs
+Exec=cppcheck-gui
+Icon=cppcheck
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Development;Utility;Qt;
+
