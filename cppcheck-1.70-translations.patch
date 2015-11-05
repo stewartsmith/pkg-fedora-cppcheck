@@ -1,0 +1,12 @@
+diff -up cppcheck-1.70/gui/CMakeLists.txt.orig cppcheck-1.70/gui/CMakeLists.txt
+--- cppcheck-1.70/gui/CMakeLists.txt.orig	2015-11-05 10:38:42.248204919 -0800
++++ cppcheck-1.70/gui/CMakeLists.txt	2015-11-05 10:45:01.897795689 -0800
+@@ -26,7 +26,7 @@ if (BUILD_GUI)
+     add_executable(cppcheck-gui ${hdrs} ${srcs} ${uis_hdrs} ${resources} ${qms})
+ 
+     install(TARGETS cppcheck-gui RUNTIME DESTINATION bin COMPONENT applications)
+-    install(FILES ${qms} DESTINATION bin COMPONENT applications)
++    install(FILES ${qms} DESTINATION share/${PROJECT_NAME}/ COMPONENT applications)
+ 
+     set(CMAKE_AUTOMOC OFF)
+ 
