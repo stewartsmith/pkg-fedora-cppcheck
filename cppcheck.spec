@@ -1,11 +1,12 @@
 Name:		cppcheck
 Version:	1.70
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
 URL:		http://cppcheck.wiki.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
+Source1:        cppcheck.desktop
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 # Use system tinyxml2
@@ -21,6 +22,7 @@ BuildRequires:	docbook-style-xsl
 BuildRequires:	libxslt
 BuildRequires:  qt4-devel
 BuildRequires:  cmake
+BuildRequires:  desktop-file-utils
 
 %description
 Cppcheck is a static analysis tool for C/C++ code. Unlike C/C++
@@ -68,9 +70,13 @@ install -D -p -m 644 cppcheck.1 %{buildroot}%{_mandir}/man1/cppcheck.1
 rm -rf %{buildroot}%{_includedir}/CppCheck
 rm %{buildroot}%{_libdir}/libCppCheck.*
 
+# Install desktop file
+desktop-file-install --dir=%{buildroot}%{_datadir}/applications %{SOURCE1}
+# Install logo
+install -D -p -m 644 gui/icon.png %{buildroot}%{_datadir}/pixmaps/cppcheck.png
+
 %check
-# Config is not available in the system-wide directory - delete executables and recompile
-find . -name \*.o -delete
+# CMake build doesn't have check...
 CXXFLAGS="%{optflags} -DNDEBUG $(pcre-config --cflags)" \
     LDFLAGS="$RPM_LD_FLAGS" LIBS=-ltinyxml2 make TINYXML= \
     CFGDIR=$(pwd)/cfg \
@@ -89,9 +95,14 @@ rm -rf %{buildroot}
 
 %files gui
 %{_bindir}/cppcheck-gui
+%{_datadir}/applications/cppcheck.desktop
+%{_datadir}/pixmaps/cppcheck.png
 
 
 %changelog
+* Thu Nov 5 2015 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.70-2
+- Include GUI (BZ #1278318).
+
 * Mon Sep 21 2015 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.70-1
 - Update to 1.70.
 
