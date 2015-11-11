@@ -1,6 +1,6 @@
 Name:		cppcheck
 Version:	1.70
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	Tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
@@ -59,7 +59,8 @@ xsltproc --nonet -o man/manual.html \
 mkdir objdir-%{_target_platform}
 cd objdir-%{_target_platform}
 # Upstream doesn't support shared libraries (unversioned solib)
-%cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_GUI=1 -DBUILD_SHARED_LIBS:BOOL=OFF
+%cmake .. -DCMAKE_BUILD_TYPE=Release -DHAVE_RULES=1 -DBUILD_GUI=1 -DBUILD_SHARED_LIBS:BOOL=OFF
+make %{?_smp_mflags}
 
 %install
 rm -rf %{buildroot}
@@ -100,6 +101,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Wed Nov 11 2015 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.70-3
+- Enable HAVE_RULES.
+
 * Thu Nov 5 2015 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.70-2
 - Include GUI (BZ #1278318).
 
