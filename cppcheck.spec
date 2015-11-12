@@ -60,7 +60,8 @@ mkdir objdir-%{_target_platform}
 cd objdir-%{_target_platform}
 # Upstream doesn't support shared libraries (unversioned solib)
 %cmake .. -DCMAKE_BUILD_TYPE=Release -DHAVE_RULES=1 -DBUILD_GUI=1 -DBUILD_SHARED_LIBS:BOOL=OFF
-make %{?_smp_mflags}
+# SMP make doesn't seem to work
+make
 
 %install
 rm -rf %{buildroot}
