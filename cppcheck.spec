@@ -1,6 +1,6 @@
 Name:		cppcheck
 Version:	1.70
-Release:	3%{?dist}
+Release:	4%{?dist}
 Summary:	Tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
@@ -15,6 +15,8 @@ Patch0:         cppcheck-1.70-tinyxml.patch
 Patch1:         cppcheck-1.70-translations.patch
 # Fix library install suffix
 Patch2:         cppcheck-1.70-libsuffix.patch
+# Link whole library
+Patch3:	        cppcheck-1.70-link.patch
 
 BuildRequires:	pcre-devel
 BuildRequires:	tinyxml2-devel >= 2.1.0
@@ -45,6 +47,7 @@ This package contains the graphical user interface for cppcheck.
 %patch0 -p1 -b .tinyxml
 %patch1 -p1 -b .translations
 %patch2 -p1 -b .libsuffix
+%patch3 -p1 -b .link
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
 
@@ -102,6 +105,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri Nov 13 2015 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.70-4
+- Link whole archive (BZ #1280242), patch by Mamoru Tasaka.
+
 * Wed Nov 11 2015 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.70-3
 - Enable HAVE_RULES.
 
