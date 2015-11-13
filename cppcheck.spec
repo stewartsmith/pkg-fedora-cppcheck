@@ -1,6 +1,6 @@
 Name:		cppcheck
 Version:	1.70
-Release:	3%{?dist}
+Release:	4%{?dist}
 Summary:	Tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
@@ -15,6 +15,8 @@ Patch0:         cppcheck-1.70-tinyxml.patch
 Patch1:         cppcheck-1.70-translations.patch
 # Fix library install suffix
 Patch2:         cppcheck-1.70-libsuffix.patch
+# Link whole library
+Patch3:	        cppcheck-1.70-link.patch
 
 BuildRequires:	pcre-devel
 BuildRequires:	tinyxml2-devel >= 2.1.0
@@ -45,6 +47,7 @@ This package contains the graphical user interface for cppcheck.
 %patch0 -p1 -b .tinyxml
 %patch1 -p1 -b .translations
 %patch2 -p1 -b .libsuffix
+%patch3 -p1 -b .link
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
 
@@ -59,8 +62,9 @@ xsltproc --nonet -o man/manual.html \
 mkdir objdir-%{_target_platform}
 cd objdir-%{_target_platform}
 # Upstream doesn't support shared libraries (unversioned solib)
-%cmake .. -DCMAKE_BUILD_TYPE=Release -DHAVE_RULES=1 -DBUILD_GUI=1 -DBUILD_SHARED_LIBS:BOOL=OFF
-make %{?_smp_mflags}
+%cmake .. -DCMAKE_BUILD_TYPE=Release -DHAVE_RULES=1 -DBUILD_GUI=1 -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=1
+# SMP make doesn't seem to work
+make cppcheck
 
 %install
 rm -rf %{buildroot}
@@ -77,13 +81,8 @@ desktop-file-install --dir=%{buildroot}%{_datadir}/applications %{SOURCE1}
 install -D -p -m 644 gui/icon.png %{buildroot}%{_datadir}/pixmaps/cppcheck.png
 
 %check
-# CMake build doesn't have check...
-CXXFLAGS="%{optflags} -DNDEBUG $(pcre-config --cflags)" \
-    LDFLAGS="$RPM_LD_FLAGS" LIBS=-ltinyxml2 make TINYXML= \
-    CFGDIR=$(pwd)/cfg \
-    HAVE_RULES=yes \
-    DB2MAN=%{_datadir}/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl \
-    %{?_smp_mflags} check
+cd objdir-%{_target_platform}/bin
+./testrunner -g -q
 
 %clean
 rm -rf %{buildroot}
@@ -101,6 +100,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri Nov 13 2015 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.70-4
+- Link whole archive (BZ #1280242), patch by Mamoru Tasaka.
+- Compile and run tests using CMake.
+
 * Wed Nov 11 2015 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.70-3
 - Enable HAVE_RULES.
 
