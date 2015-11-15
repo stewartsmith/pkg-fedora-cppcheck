@@ -1,6 +1,6 @@
 Name:		cppcheck
-Version:	1.70
-Release:	4%{?dist}
+Version:	1.71
+Release:	1%{?dist}
 Summary:	Tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
@@ -100,6 +100,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sat Nov 14 2015 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.71-1
+- Update to 1.71.
+
 * Fri Nov 13 2015 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.70-4
 - Link whole archive (BZ #1280242), patch by Mamoru Tasaka.
 - Compile and run tests using CMake.
