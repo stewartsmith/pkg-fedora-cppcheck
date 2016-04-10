@@ -65,10 +65,6 @@ rm -rf %{buildroot}
 make -C objdir-%{_target_platform} DESTDIR=%{buildroot} install
 install -D -p -m 644 cppcheck.1 %{buildroot}%{_mandir}/man1/cppcheck.1
 
-# Don't ship devel stuff
-rm -rf %{buildroot}%{_includedir}/CppCheck
-rm %{buildroot}%{_libdir}/libCppCheck.*
-
 # Install desktop file
 desktop-file-install --dir=%{buildroot}%{_datadir}/applications %{SOURCE1}
 # Install logo
