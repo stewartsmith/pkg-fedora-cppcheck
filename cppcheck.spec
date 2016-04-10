@@ -1,6 +1,6 @@
 Name:		cppcheck
-Version:	1.70
-Release:	4%{?dist}
+Version:	1.73
+Release:	1%{?dist}
 Summary:	Tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
@@ -10,13 +10,9 @@ Source1:        cppcheck.desktop
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 # Use system tinyxml2
-Patch0:         cppcheck-1.70-tinyxml.patch
+Patch0:         cppcheck-1.73-tinyxml.patch
 # Fix location of translations
-Patch1:         cppcheck-1.70-translations.patch
-# Fix library install suffix
-Patch2:         cppcheck-1.70-libsuffix.patch
-# Link whole library
-Patch3:	        cppcheck-1.70-link.patch
+Patch1:         cppcheck-1.73-translations.patch
 
 BuildRequires:	pcre-devel
 BuildRequires:	tinyxml2-devel >= 2.1.0
@@ -46,8 +42,6 @@ This package contains the graphical user interface for cppcheck.
 %setup -q
 %patch0 -p1 -b .tinyxml
 %patch1 -p1 -b .translations
-%patch2 -p1 -b .libsuffix
-%patch3 -p1 -b .link
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
 
@@ -71,10 +65,6 @@ rm -rf %{buildroot}
 make -C objdir-%{_target_platform} DESTDIR=%{buildroot} install
 install -D -p -m 644 cppcheck.1 %{buildroot}%{_mandir}/man1/cppcheck.1
 
-# Don't ship devel stuff
-rm -rf %{buildroot}%{_includedir}/CppCheck
-rm %{buildroot}%{_libdir}/libCppCheck.*
-
 # Install desktop file
 desktop-file-install --dir=%{buildroot}%{_datadir}/applications %{SOURCE1}
 # Install logo
@@ -82,7 +72,10 @@ install -D -p -m 644 gui/icon.png %{buildroot}%{_datadir}/pixmaps/cppcheck.png
 
 %check
 cd objdir-%{_target_platform}/bin
+# A test currently fails on 32-bit archs, see http://trac.cppcheck.net/ticket/7037
+%if 0%{?__isa_bits} == 64
 ./testrunner -g -q
+%endif
 
 %clean
 rm -rf %{buildroot}
@@ -100,6 +93,15 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sat Apr 09 2016 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.73-1
+- Update to 1.73.
+
+* Wed Feb 03 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1.71-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
+
+* Sat Nov 14 2015 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.71-1
+- Update to 1.71.
+
 * Fri Nov 13 2015 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.70-4
 - Link whole archive (BZ #1280242), patch by Mamoru Tasaka.
 - Compile and run tests using CMake.
