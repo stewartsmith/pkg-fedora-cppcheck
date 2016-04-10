@@ -73,7 +73,7 @@ install -D -p -m 644 gui/icon.png %{buildroot}%{_datadir}/pixmaps/cppcheck.png
 %check
 cd objdir-%{_target_platform}/bin
 # A test currently fails on 32-bit archs, see http://trac.cppcheck.net/ticket/7037
-%if %{__isa_bits} != 32
+%if %{__isa_bits} == 64
 ./testrunner -g -q
 %endif
 
