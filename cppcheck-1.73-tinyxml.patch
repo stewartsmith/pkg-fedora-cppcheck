@@ -1,0 +1,73 @@
+diff -up cppcheck-1.73/cli/CMakeLists.txt.tinyxml cppcheck-1.73/cli/CMakeLists.txt
+--- cppcheck-1.73/cli/CMakeLists.txt.tinyxml	2016-04-08 20:47:43.000000000 +0200
++++ cppcheck-1.73/cli/CMakeLists.txt	2016-04-10 03:24:45.678212832 +0200
+@@ -1,5 +1,4 @@
+ include_directories(${PROJECT_SOURCE_DIR}/lib/)
+-include_directories(SYSTEM ${PROJECT_SOURCE_DIR}/externals/tinyxml/)
+ 
+ file(GLOB hdrs "*.h")
+ file(GLOB srcs "*.cpp")
+@@ -7,10 +6,11 @@ file(GLOB mainfile "main.cpp")
+ list(REMOVE_ITEM srcs ${mainfile})
+ 
+ add_library(cli_objs OBJECT ${hdrs} ${srcs}) 
+-add_executable(cppcheck ${hdrs} ${mainfile} $<TARGET_OBJECTS:cli_objs> $<TARGET_OBJECTS:lib_objs> $<TARGET_OBJECTS:tinyxml_objs>)
++add_executable(cppcheck ${hdrs} ${mainfile} $<TARGET_OBJECTS:cli_objs> $<TARGET_OBJECTS:lib_objs>)
+ if (HAVE_RULES)
+     target_link_libraries(cppcheck pcre)
+ endif()
++target_link_libraries(cppcheck -ltinyxml2)
+ 
+ install(TARGETS cppcheck
+     RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR}
+diff -up cppcheck-1.73/CMakeLists.txt.tinyxml cppcheck-1.73/CMakeLists.txt
+--- cppcheck-1.73/CMakeLists.txt.tinyxml	2016-04-08 20:47:43.000000000 +0200
++++ cppcheck-1.73/CMakeLists.txt	2016-04-10 03:23:36.158210959 +0200
+@@ -16,7 +16,6 @@ if (BUILD_TESTS)
+     enable_testing()
+ endif()
+ 
+-add_subdirectory(externals/tinyxml)
+ add_subdirectory(lib)   # CppCheck Library 
+ add_subdirectory(cli)   # Client application
+ add_subdirectory(test)  # Tests
+diff -up cppcheck-1.73/gui/CMakeLists.txt.tinyxml cppcheck-1.73/gui/CMakeLists.txt
+--- cppcheck-1.73/gui/CMakeLists.txt.tinyxml	2016-04-08 20:47:43.000000000 +0200
++++ cppcheck-1.73/gui/CMakeLists.txt	2016-04-10 03:23:36.160210959 +0200
+@@ -11,7 +11,6 @@ if (BUILD_GUI)
+     endif()
+     
+     include_directories(${PROJECT_SOURCE_DIR}/lib/)
+-    include_directories(SYSTEM ${PROJECT_SOURCE_DIR}/externals/tinyxml/)
+ 
+     file(GLOB hdrs "*.h")
+     file(GLOB srcs "*.cpp")
+@@ -21,8 +20,9 @@ if (BUILD_GUI)
+     QT4_ADD_RESOURCES(resources "gui.qrc")
+     QT4_ADD_TRANSLATION(qms ${tss})
+     
+-    add_executable(cppcheck-gui ${hdrs} ${srcs} ${uis_hdrs} ${resources} ${qms} $<TARGET_OBJECTS:lib_objs> $<TARGET_OBJECTS:tinyxml_objs>)
++    add_executable(cppcheck-gui ${hdrs} ${srcs} ${uis_hdrs} ${resources} ${qms} $<TARGET_OBJECTS:lib_objs>)
+     target_link_libraries(cppcheck-gui ${QT_LIBRARIES})
++    target_link_libraries(cppcheck-gui -ltinyxml2)
+     if (HAVE_RULES)
+         target_link_libraries(cppcheck-gui pcre)
+     endif()
+diff -up cppcheck-1.73/test/CMakeLists.txt.tinyxml cppcheck-1.73/test/CMakeLists.txt
+--- cppcheck-1.73/test/CMakeLists.txt.tinyxml	2016-04-08 20:47:43.000000000 +0200
++++ cppcheck-1.73/test/CMakeLists.txt	2016-04-10 03:23:36.161210959 +0200
+@@ -1,12 +1,12 @@
+ if (BUILD_TESTS)
+ 
+     include_directories(${PROJECT_SOURCE_DIR}/lib/ ${PROJECT_SOURCE_DIR}/cli/)
+-    include_directories(SYSTEM ${PROJECT_SOURCE_DIR}/externals/tinyxml)
+ 
+     file(GLOB hdrs "*.h")
+     file(GLOB srcs "*.cpp")
+ 
+-    add_executable(testrunner ${hdrs} ${srcs} $<TARGET_OBJECTS:lib_objs> $<TARGET_OBJECTS:cli_objs> $<TARGET_OBJECTS:tinyxml_objs>)
++    add_executable(testrunner ${hdrs} ${srcs} $<TARGET_OBJECTS:lib_objs> $<TARGET_OBJECTS:cli_objs>)
++    target_link_libraries(testrunner -ltinyxml2)
+     if (HAVE_RULES)
+         target_link_libraries(testrunner pcre)
+     endif()
