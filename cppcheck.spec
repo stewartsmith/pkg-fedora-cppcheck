@@ -1,6 +1,6 @@
 Name:		cppcheck
-Version:	1.73
-Release:	2%{?dist}
+Version:	1.74
+Release:	1%{?dist}
 Summary:	Tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
@@ -93,6 +93,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Mon Aug 01 2016 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.74-1
+- Update to 1.74.
+
 * Sun May 22 2016 Rich Mattes <richmattes@gmail.com> - 1.73-2
 - Rebuild for tinyxml2-3.0.0
 
