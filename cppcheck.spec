@@ -1,6 +1,6 @@
 Name:		cppcheck
-Version:	1.74
-Release:	2%{?dist}
+Version:	1.75
+Release:	1%{?dist}
 Summary:	Tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
@@ -10,11 +10,9 @@ Source1:        cppcheck.desktop
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 # Use system tinyxml2
-Patch0:         cppcheck-1.73-tinyxml.patch
+Patch0:         cppcheck-1.75-tinyxml.patch
 # Fix location of translations
-Patch1:         cppcheck-1.73-translations.patch
-# Fix tests on x86
-Patch2:         cppcheck-1.74-test.patch
+Patch1:         cppcheck-1.75-translations.patch
 
 BuildRequires:	pcre-devel
 BuildRequires:	tinyxml2-devel >= 2.1.0
@@ -44,7 +42,6 @@ This package contains the graphical user interface for cppcheck.
 %setup -q
 %patch0 -p1 -b .tinyxml
 %patch1 -p1 -b .translations
-%patch2 -p0 -b .test
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
 
@@ -93,6 +90,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Mon Aug 08 2016 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.75-1
+- Update to 1.75.
+
 * Tue Aug 02 2016 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.74-2
 - Re-enable tests on x86.
 
