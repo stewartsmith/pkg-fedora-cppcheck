@@ -1,18 +1,17 @@
 Name:		cppcheck
-Version:	1.75
+Version:	1.77
 Release:	1%{?dist}
 Summary:	Tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
 URL:		http://cppcheck.wiki.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
-Source1:        cppcheck.desktop
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 # Use system tinyxml2
-Patch0:         cppcheck-1.75-tinyxml.patch
+Patch0:         cppcheck-1.77-tinyxml.patch
 # Fix location of translations
-Patch1:         cppcheck-1.75-translations.patch
+Patch1:         cppcheck-1.77-translations.patch
 
 BuildRequires:	pcre-devel
 BuildRequires:	tinyxml2-devel >= 2.1.0
@@ -66,9 +65,9 @@ make -C objdir-%{_target_platform} DESTDIR=%{buildroot} install
 install -D -p -m 644 cppcheck.1 %{buildroot}%{_mandir}/man1/cppcheck.1
 
 # Install desktop file
-desktop-file-install --dir=%{buildroot}%{_datadir}/applications %{SOURCE1}
+desktop-file-validate %{buildroot}%{_datadir}/applications/cppcheck-gui.desktop
 # Install logo
-install -D -p -m 644 gui/icon.png %{buildroot}%{_datadir}/pixmaps/cppcheck.png
+install -D -p -m 644 gui/cppcheck-gui.png %{buildroot}%{_datadir}/pixmaps/cppcheck-gui.png
 
 %check
 cd objdir-%{_target_platform}/bin
@@ -85,11 +84,16 @@ rm -rf %{buildroot}
 
 %files gui
 %{_bindir}/cppcheck-gui
-%{_datadir}/applications/cppcheck.desktop
-%{_datadir}/pixmaps/cppcheck.png
+%{_datadir}/applications/cppcheck-gui.desktop
+%{_datadir}/pixmaps/cppcheck-gui.png
+%{_datadir}/icons/hicolor/64x64/apps/cppcheck-gui.png
+%{_datadir}/icons/hicolor/scalable/apps/cppcheck-gui.svg
 
 
 %changelog
+* Tue Jan 31 2017 Jon Ciesla <limburgher@gmail.com> - 1.77-1
+- 1.77.
+
 * Mon Aug 08 2016 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.75-1
 - Update to 1.75.
 
