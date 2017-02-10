@@ -1,6 +1,6 @@
 Name:		cppcheck
 Version:	1.77
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
@@ -91,6 +91,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.77-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Tue Jan 31 2017 Jon Ciesla <limburgher@gmail.com> - 1.77-1
 - 1.77.
 
