@@ -1,6 +1,6 @@
 Name:		cppcheck
 Version:	1.77
-Release:	3%{?dist}
+Release:	4%{?dist}
 Summary:	Tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
@@ -12,9 +12,6 @@ BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 Patch0:         cppcheck-1.77-tinyxml.patch
 # Fix location of translations
 Patch1:         cppcheck-1.77-translations.patch
-# http://trac.cppcheck.net/ticket/7910
-# Patch not committed into repository yet, pulled from the above ticket
-Patch2:         cppcheck-1.77-gcc7.patch
 
 BuildRequires:	pcre-devel
 BuildRequires:	tinyxml2-devel >= 2.1.0
@@ -44,7 +41,6 @@ This package contains the graphical user interface for cppcheck.
 %setup -q
 %patch0 -p1 -b .tinyxml
 %patch1 -p1 -b .translations
-%patch2 -p1 -b .gcc7
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
 
@@ -95,6 +91,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Mon Feb 27 2017 Mamoru TASAKA <mtasaka@fedoraproject.org> - 1.77-4
+- Remove Patch2: fixed in gcc side (gcc-7.0.1-10.fc26)
+  (ref: bug 1423312)
+
 * Fri Feb 17 2017 Mamoru TASAKA <mtasaka@fedoraproject.org> - 1.77-3
 - Fix FTBFS with gcc7 (bug 1423312, upstream ticket 7910)
 
