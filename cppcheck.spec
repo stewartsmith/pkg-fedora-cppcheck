@@ -1,6 +1,6 @@
 Name:		cppcheck
-Version:	1.77
-Release:	4%{?dist}
+Version:	1.78
+Release:	1%{?dist}
 Summary:	Tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
@@ -12,6 +12,8 @@ BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 Patch0:         cppcheck-1.77-tinyxml.patch
 # Fix location of translations
 Patch1:         cppcheck-1.77-translations.patch
+# Set location of config files
+Patch2:         cppcheck-1.78-cfgdir.patch
 
 BuildRequires:	pcre-devel
 BuildRequires:	tinyxml2-devel >= 2.1.0
@@ -41,6 +43,7 @@ This package contains the graphical user interface for cppcheck.
 %setup -q
 %patch0 -p1 -b .tinyxml
 %patch1 -p1 -b .translations
+%patch2 -p1 -b .cfgdir
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
 
@@ -55,7 +58,7 @@ xsltproc --nonet -o man/manual.html \
 mkdir objdir-%{_target_platform}
 cd objdir-%{_target_platform}
 # Upstream doesn't support shared libraries (unversioned solib)
-%cmake .. -DCMAKE_BUILD_TYPE=Release -DHAVE_RULES=1 -DBUILD_GUI=1 -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=1
+%cmake .. -DCMAKE_BUILD_TYPE=Release -DHAVE_RULES=1 -DBUILD_GUI=1 -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=1 -DCFGDIR=%{_datadir}/CppCheck
 # SMP make doesn't seem to work
 make cppcheck
 
@@ -91,6 +94,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sun Apr 09 2017 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.78-1
+- Make cppcheck able to find its configs once again (bug 1427788).
+- Update to 1.78.
+
 * Mon Feb 27 2017 Mamoru TASAKA <mtasaka@fedoraproject.org> - 1.77-4
 - Remove Patch2: fixed in gcc side (gcc-7.0.1-10.fc26)
   (ref: bug 1423312)
