@@ -1,0 +1,16 @@
+diff -up cppcheck-1.78/CMakeLists.txt.orig cppcheck-1.78/CMakeLists.txt
+diff -up cppcheck-1.78/cmake/options.cmake.orig cppcheck-1.78/cmake/options.cmake
+--- cppcheck-1.78/cmake/options.cmake.orig	2017-04-01 11:05:13.000000000 +0200
++++ cppcheck-1.78/cmake/options.cmake	2017-04-09 14:13:30.130818011 +0200
+@@ -23,6 +23,11 @@ option(ANALYZE_DATAFLOW     "Clang dynam
+ option(WARNINGS_ARE_ERRORS  "Treat warnings as errors"                                      OFF)
+ option(WARNINGS_ANSI_ISO    "Issue all the mandatory diagnostics Listed in C standard"      ON)
+ 
++option(CFGDIR "Configuration file directory"                                      OFF)
++if(CFGDIR)
++    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DCFG=${CFGDIR}")
++endif(CFGDIR)
++
+ set(USE_MATCHCOMPILER "Auto" CACHE STRING "Usage of match compliler")
+ set_property(CACHE USE_MATCHCOMPILER PROPERTY STRINGS Auto Off On Verify) 
+ if (USE_MATCHCOMPILER STREQUAL "Auto")
