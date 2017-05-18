@@ -1,5 +1,5 @@
 Name:		cppcheck
-Version:	1.78
+Version:	1.79
 Release:	1%{?dist}
 Summary:	Tool for static C/C++ code analysis
 Group:		Development/Languages
@@ -11,7 +11,7 @@ BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 # Use system tinyxml2
 Patch0:         cppcheck-1.77-tinyxml.patch
 # Fix location of translations
-Patch1:         cppcheck-1.77-translations.patch
+Patch1:         cppcheck-1.79-translations.patch
 # Set location of config files
 Patch2:         cppcheck-1.78-cfgdir.patch
 
@@ -94,6 +94,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Wed May 17 2017 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.79-1
+- Update to 1.79.
+
 * Sun Apr 09 2017 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.78-1
 - Make cppcheck able to find its configs once again (bug 1427788).
 - Update to 1.78.
