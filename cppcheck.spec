@@ -1,11 +1,11 @@
 Name:		cppcheck
-Version:	1.79
-Release:	2%{?dist}
+Version:	1.80
+Release:	1%{?dist}
 Summary:	Tool for static C/C++ code analysis
 Group:		Development/Languages
 License:	GPLv3+
 URL:		http://cppcheck.wiki.sourceforge.net/
-Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
+Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 # Use system tinyxml2
@@ -94,6 +94,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Aug 01 2017 Gwyn Ciesla <limburgher@gmail.com> - 1.80-1
+- 1.80
+
 * Wed Jul 26 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.79-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
 
