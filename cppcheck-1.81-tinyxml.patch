@@ -1,6 +1,6 @@
-diff -up cppcheck-1.75/cli/CMakeLists.txt.tinyxml cppcheck-1.75/cli/CMakeLists.txt
---- cppcheck-1.75/cli/CMakeLists.txt.tinyxml	2016-08-09 06:43:08.152146498 +0200
-+++ cppcheck-1.75/cli/CMakeLists.txt	2016-08-09 06:44:12.819146690 +0200
+diff -up cppcheck-1.81/cli/CMakeLists.txt.tinyxml cppcheck-1.81/cli/CMakeLists.txt
+--- cppcheck-1.81/cli/CMakeLists.txt.tinyxml	2017-10-07 23:11:39.000000000 +0200
++++ cppcheck-1.81/cli/CMakeLists.txt	2017-10-18 16:40:18.898918748 +0200
 @@ -1,5 +1,4 @@
  include_directories(${PROJECT_SOURCE_DIR}/lib/)
 -include_directories(SYSTEM ${PROJECT_SOURCE_DIR}/externals/tinyxml/)
@@ -20,9 +20,9 @@ diff -up cppcheck-1.75/cli/CMakeLists.txt.tinyxml cppcheck-1.75/cli/CMakeLists.t
  
  install(TARGETS cppcheck
      RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR}
-diff -up cppcheck-1.75/CMakeLists.txt.tinyxml cppcheck-1.75/CMakeLists.txt
---- cppcheck-1.75/CMakeLists.txt.tinyxml	2016-08-09 06:43:08.153146498 +0200
-+++ cppcheck-1.75/CMakeLists.txt	2016-08-09 06:43:31.191146016 +0200
+diff -up cppcheck-1.81/CMakeLists.txt.tinyxml cppcheck-1.81/CMakeLists.txt
+--- cppcheck-1.81/CMakeLists.txt.tinyxml	2017-10-07 23:11:39.000000000 +0200
++++ cppcheck-1.81/CMakeLists.txt	2017-10-18 16:40:18.899918734 +0200
 @@ -16,7 +16,6 @@ if (BUILD_TESTS)
      enable_testing()
  endif()
@@ -31,9 +31,33 @@ diff -up cppcheck-1.75/CMakeLists.txt.tinyxml cppcheck-1.75/CMakeLists.txt
  add_subdirectory(externals/simplecpp)
  add_subdirectory(lib)   # CppCheck Library 
  add_subdirectory(cli)   # Client application
-diff -up cppcheck-1.75/gui/CMakeLists.txt.tinyxml cppcheck-1.75/gui/CMakeLists.txt
---- cppcheck-1.75/test/CMakeLists.txt.tinyxml	2016-08-09 06:43:08.155146498 +0200
-+++ cppcheck-1.75/test/CMakeLists.txt	2016-08-09 06:45:26.020153572 +0200
+diff -up cppcheck-1.81/gui/CMakeLists.txt.tinyxml cppcheck-1.81/gui/CMakeLists.txt
+--- cppcheck-1.81/gui/CMakeLists.txt.tinyxml	2017-10-07 23:11:39.000000000 +0200
++++ cppcheck-1.81/gui/CMakeLists.txt	2017-10-18 16:41:12.083142778 +0200
+@@ -10,7 +10,6 @@ if (BUILD_GUI)
+     endif()
+ 
+     include_directories(${PROJECT_SOURCE_DIR}/lib/)
+-    include_directories(SYSTEM ${PROJECT_SOURCE_DIR}/externals/tinyxml/)
+ 
+     file(GLOB hdrs "*.h")
+     file(GLOB srcs "*.cpp")
+@@ -20,10 +19,11 @@ if (BUILD_GUI)
+     QT5_ADD_RESOURCES(resources "gui.qrc")
+     QT5_ADD_TRANSLATION(qms ${tss})
+ 
+-    add_executable(cppcheck-gui ${hdrs} ${srcs} ${uis_hdrs} ${resources} ${qms} $<TARGET_OBJECTS:lib_objs> $<TARGET_OBJECTS:tinyxml_objs> $<TARGET_OBJECTS:simplecpp_objs>)
++    add_executable(cppcheck-gui ${hdrs} ${srcs} ${uis_hdrs} ${resources} ${qms} $<TARGET_OBJECTS:lib_objs> $<TARGET_OBJECTS:simplecpp_objs>)
+     if (HAVE_RULES)
+         target_link_libraries(cppcheck-gui pcre)
+     endif()
++    target_link_libraries(cppcheck-gui tinyxml2)
+     qt5_use_modules(cppcheck-gui ${GUI_QT_COMPONENTS})
+ 
+     install(TARGETS cppcheck-gui RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR} COMPONENT applications)
+diff -up cppcheck-1.81/test/CMakeLists.txt.tinyxml cppcheck-1.81/test/CMakeLists.txt
+--- cppcheck-1.81/test/CMakeLists.txt.tinyxml	2017-10-07 23:11:39.000000000 +0200
++++ cppcheck-1.81/test/CMakeLists.txt	2017-10-18 16:40:18.900918719 +0200
 @@ -1,16 +1,16 @@
  if (BUILD_TESTS)
  
@@ -53,28 +77,3 @@ diff -up cppcheck-1.75/gui/CMakeLists.txt.tinyxml cppcheck-1.75/gui/CMakeLists.t
  
      add_custom_target(copy_cfg ALL
          COMMENT "Copying cfg files")
---- cppcheck-1.77/gui/CMakeLists.txt.orig	2017-01-31 12:46:53.394879690 -0600
-+++ cppcheck-1.77/gui/CMakeLists.txt	2017-01-31 12:47:57.626549785 -0600
-@@ -11,7 +11,6 @@
-     endif()
- 
-     include_directories(${PROJECT_SOURCE_DIR}/lib/)
--    include_directories(SYSTEM ${PROJECT_SOURCE_DIR}/externals/tinyxml/)
- 
-     file(GLOB hdrs "*.h")
-     file(GLOB srcs "*.cpp")
-@@ -21,12 +20,13 @@
-     QT4_ADD_RESOURCES(resources "gui.qrc")
-     QT4_ADD_TRANSLATION(qms ${tss})
- 
--    add_executable(cppcheck-gui ${hdrs} ${srcs} ${uis_hdrs} ${resources} ${qms} $<TARGET_OBJECTS:lib_objs> $<TARGET_OBJECTS:tinyxml_objs> $<TARGET_OBJECTS:simplecpp_objs>)
-+    add_executable(cppcheck-gui ${hdrs} ${srcs} ${uis_hdrs} ${resources} ${qms} $<TARGET_OBJECTS:lib_objs> $<TARGET_OBJECTS:simplecpp_objs>)
-     target_link_libraries(cppcheck-gui ${QT_LIBRARIES})
-     if (HAVE_RULES)
-         target_link_libraries(cppcheck-gui pcre)
-     endif()
- 
-+    target_link_libraries(cppcheck-gui tinyxml2)
- 
-     install(TARGETS cppcheck-gui RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR} COMPONENT applications)
-     install(FILES ${qms} DESTINATION ${CMAKE_INSTALL_FULL_BINDIR} COMPONENT applications)

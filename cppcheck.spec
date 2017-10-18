@@ -1,24 +1,24 @@
-Name:		cppcheck
-Version:	1.81
-Release:	1%{?dist}
-Summary:	Tool for static C/C++ code analysis
-Group:		Development/Languages
-License:	GPLv3+
-URL:		http://cppcheck.wiki.sourceforge.net/
-Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
-BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
+Name:           cppcheck
+Version:        1.81
+Release:        1%{?dist}
+Summary:        Tool for static C/C++ code analysis
+Group:          Development/Languages
+License:        GPLv3+
+URL:            http://cppcheck.wiki.sourceforge.net/
+Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+BuildRoot:      %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 # Use system tinyxml2
-Patch0:         cppcheck-1.77-tinyxml.patch
+Patch0:         cppcheck-1.81-tinyxml.patch
 # Fix location of translations
-Patch1:         cppcheck-1.79-translations.patch
+Patch1:         cppcheck-1.81-translations.patch
 # Set location of config files
 Patch2:         cppcheck-1.78-cfgdir.patch
 
-BuildRequires:	pcre-devel
-BuildRequires:	tinyxml2-devel >= 2.1.0
-BuildRequires:	docbook-style-xsl
-BuildRequires:	libxslt
+BuildRequires:  pcre-devel
+BuildRequires:  tinyxml2-devel >= 2.1.0
+BuildRequires:  docbook-style-xsl
+BuildRequires:  libxslt
 BuildRequires:  qt4-devel
 BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
