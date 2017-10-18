@@ -19,7 +19,7 @@ BuildRequires:  pcre-devel
 BuildRequires:  tinyxml2-devel >= 2.1.0
 BuildRequires:  docbook-style-xsl
 BuildRequires:  libxslt
-BuildRequires:  qt4-devel
+BuildRequires:  qt5-devel
 BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
 
