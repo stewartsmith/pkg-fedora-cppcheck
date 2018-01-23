@@ -1,6 +1,6 @@
 Name:           cppcheck
 Version:        1.81
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Tool for static C/C++ code analysis
 Group:          Development/Languages
 License:        GPLv3+
@@ -94,6 +94,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Jan 23 2018 Björn Esser <besser82@fedoraproject.org> - 1.81-3
+- Rebuilt for tinyxml2 soname/ABI change again
+
 * Tue Jan 23 2018 François Cami <fcami@fedoraproject.org> - 1.81-2
 - Rebuilt for tinyxml2 soname/ABI change
 
