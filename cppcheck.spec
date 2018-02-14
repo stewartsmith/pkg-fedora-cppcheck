@@ -75,9 +75,6 @@ install -D -p -m 644 gui/cppcheck-gui.png %{buildroot}%{_datadir}/pixmaps/cppche
 cd objdir-%{_target_platform}/bin
 ./testrunner -g -q
 
-%clean
-rm -rf %{buildroot}
-
 %files
 %doc AUTHORS COPYING man/manual.html
 %{_datadir}/CppCheck/
