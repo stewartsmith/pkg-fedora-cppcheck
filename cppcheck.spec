@@ -1,6 +1,6 @@
 Name:           cppcheck
 Version:        1.81
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Tool for static C/C++ code analysis
 Group:          Development/Languages
 License:        GPLv3+
@@ -14,6 +14,7 @@ Patch1:         cppcheck-1.81-translations.patch
 # Set location of config files
 Patch2:         cppcheck-1.78-cfgdir.patch
 
+BuildRequires:  gcc-c++
 BuildRequires:  pcre-devel
 BuildRequires:  tinyxml2-devel >= 2.1.0
 BuildRequires:  docbook-style-xsl
@@ -90,6 +91,9 @@ cd objdir-%{_target_platform}/bin
 
 
 %changelog
+* Wed Feb 28 2018 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.81-5
+- Added gcc-c++ buildrequires.
+
 * Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.81-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
