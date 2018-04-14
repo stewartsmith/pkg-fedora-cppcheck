@@ -1,6 +1,6 @@
 Name:           cppcheck
-Version:        1.81
-Release:        5%{?dist}
+Version:        1.83
+Release:        1%{?dist}
 Summary:        Tool for static C/C++ code analysis
 Group:          Development/Languages
 License:        GPLv3+
@@ -8,7 +8,7 @@ URL:            http://cppcheck.wiki.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 
 # Use system tinyxml2
-Patch0:         cppcheck-1.81-tinyxml.patch
+Patch0:         cppcheck-1.83-tinyxml.patch
 # Fix location of translations
 Patch1:         cppcheck-1.81-translations.patch
 # Set location of config files
@@ -91,6 +91,9 @@ cd objdir-%{_target_platform}/bin
 
 
 %changelog
+* Sat Apr 14 2018 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.83-1
+- Update to 1.83.
+
 * Wed Feb 28 2018 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.81-5
 - Added gcc-c++ buildrequires.
 
