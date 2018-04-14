@@ -1,3 +1,9 @@
+%if 0%{?fedora} > 0
+%global gui 1
+%else
+%global gui 0
+%endif
+
 Name:           cppcheck
 Version:        1.83
 Release:        1%{?dist}
@@ -19,9 +25,14 @@ BuildRequires:  pcre-devel
 BuildRequires:  tinyxml2-devel >= 2.1.0
 BuildRequires:  docbook-style-xsl
 BuildRequires:  libxslt
-BuildRequires:  qt5-devel
 BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
+
+%if %{gui}
+BuildRequires:  qt5-devel
+%else
+Obsoletes:      %{name}-gui < %{version}-%{release}
+%endif
 
 %description
 Cppcheck is a static analysis tool for C/C++ code. Unlike C/C++
@@ -30,6 +41,7 @@ errors in the code. Cppcheck primarily detects the types of bugs that
 the compilers normally do not detect. The goal is to detect only real
 errors in the code (i.e. have zero false positives).
 
+%if %{gui}
 %package gui
 Summary:        Graphical user interface for cppcheck
 Group:          Applications/Engineering
@@ -37,7 +49,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description gui
 This package contains the graphical user interface for cppcheck.
-
+%endif
 
 %prep
 %setup -q
@@ -58,7 +70,7 @@ xsltproc --nonet -o man/manual.html \
 mkdir objdir-%{_target_platform}
 cd objdir-%{_target_platform}
 # Upstream doesn't support shared libraries (unversioned solib)
-%cmake .. -DCMAKE_BUILD_TYPE=Release -DHAVE_RULES=1 -DBUILD_GUI=1 -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=1 -DCFGDIR=%{_datadir}/CppCheck
+%cmake .. -DCMAKE_BUILD_TYPE=Release -DHAVE_RULES=1 -DBUILD_GUI=%{gui} -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=1 -DCFGDIR=%{_datadir}/CppCheck
 # SMP make doesn't seem to work
 make cppcheck
 
@@ -67,10 +79,12 @@ rm -rf %{buildroot}
 make -C objdir-%{_target_platform} DESTDIR=%{buildroot} install
 install -D -p -m 644 cppcheck.1 %{buildroot}%{_mandir}/man1/cppcheck.1
 
+%if %{gui}
 # Install desktop file
 desktop-file-validate %{buildroot}%{_datadir}/applications/cppcheck-gui.desktop
 # Install logo
 install -D -p -m 644 gui/cppcheck-gui.png %{buildroot}%{_datadir}/pixmaps/cppcheck-gui.png
+%endif
 
 %check
 cd objdir-%{_target_platform}/bin
@@ -82,16 +96,18 @@ cd objdir-%{_target_platform}/bin
 %{_bindir}/cppcheck
 %{_mandir}/man1/cppcheck.1*
 
+%if %{gui}
 %files gui
 %{_bindir}/cppcheck-gui
 %{_datadir}/applications/cppcheck-gui.desktop
 %{_datadir}/pixmaps/cppcheck-gui.png
 %{_datadir}/icons/hicolor/64x64/apps/cppcheck-gui.png
 %{_datadir}/icons/hicolor/scalable/apps/cppcheck-gui.svg
-
+%endif
 
 %changelog
 * Sat Apr 14 2018 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.83-1
+- GUI no longer available on RHEL 7 due to Qt5 dependency.
 - Update to 1.83.
 
 * Wed Feb 28 2018 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.81-5
