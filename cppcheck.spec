@@ -1,25 +1,25 @@
-Name:		cppcheck
-Version:	1.80
-Release:	1%{?dist}
-Summary:	Tool for static C/C++ code analysis
-Group:		Development/Languages
-License:	GPLv3+
-URL:		http://cppcheck.wiki.sourceforge.net/
-Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
-BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
+Name:           cppcheck
+Version:        1.83
+Release:        1%{?dist}
+Summary:        Tool for static C/C++ code analysis
+Group:          Development/Languages
+License:        GPLv3+
+URL:            http://cppcheck.wiki.sourceforge.net/
+Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 
 # Use system tinyxml2
-Patch0:         cppcheck-1.77-tinyxml.patch
+Patch0:         cppcheck-1.83-tinyxml.patch
 # Fix location of translations
-Patch1:         cppcheck-1.79-translations.patch
+Patch1:         cppcheck-1.81-translations.patch
 # Set location of config files
 Patch2:         cppcheck-1.78-cfgdir.patch
 
-BuildRequires:	pcre-devel
-BuildRequires:	tinyxml2-devel >= 2.1.0
-BuildRequires:	docbook-style-xsl
-BuildRequires:	libxslt
-BuildRequires:  qt4-devel
+BuildRequires:  gcc-c++
+BuildRequires:  pcre-devel
+BuildRequires:  tinyxml2-devel >= 2.1.0
+BuildRequires:  docbook-style-xsl
+BuildRequires:  libxslt
+BuildRequires:  qt5-devel
 BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
 
@@ -76,9 +76,6 @@ install -D -p -m 644 gui/cppcheck-gui.png %{buildroot}%{_datadir}/pixmaps/cppche
 cd objdir-%{_target_platform}/bin
 ./testrunner -g -q
 
-%clean
-rm -rf %{buildroot}
-
 %files
 %doc AUTHORS COPYING man/manual.html
 %{_datadir}/CppCheck/
@@ -94,6 +91,24 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sat Apr 14 2018 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.83-1
+- Update to 1.83.
+
+* Wed Feb 28 2018 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.81-5
+- Added gcc-c++ buildrequires.
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.81-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
+* Tue Jan 23 2018 Björn Esser <besser82@fedoraproject.org> - 1.81-3
+- Rebuilt for tinyxml2 soname/ABI change again
+
+* Tue Jan 23 2018 François Cami <fcami@fedoraproject.org> - 1.81-2
+- Rebuilt for tinyxml2 soname/ABI change
+
+* Wed Oct 18 2017 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.81-1
+- Update to 1.81.
+
 * Tue Aug 01 2017 Gwyn Ciesla <limburgher@gmail.com> - 1.80-1
 - 1.80
 

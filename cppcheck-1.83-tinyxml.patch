@@ -1,0 +1,78 @@
+--- cppcheck-1.83.orig/cli/CMakeLists.txt	2018-04-02 03:02:50.000000000 -0400
++++ cppcheck-1.83.orig/cli/CMakeLists.txt	2018-04-12 12:46:04.990212969 -0400
+@@ -1,5 +1,4 @@ 
+ include_directories(${PROJECT_SOURCE_DIR}/lib/)
+-include_directories(SYSTEM ${PROJECT_SOURCE_DIR}/externals/tinyxml/)
+ include_directories(${PROJECT_SOURCE_DIR}/externals/simplecpp/)
+ 
+ file(GLOB hdrs "*.h")
+@@ -8,13 +7,14 @@ 
+ list(REMOVE_ITEM srcs ${mainfile})
+ 
+ add_library(cli_objs OBJECT ${hdrs} ${srcs}) 
+-add_executable(cppcheck ${hdrs} ${mainfile} $<TARGET_OBJECTS:cli_objs> $<TARGET_OBJECTS:lib_objs> $<TARGET_OBJECTS:tinyxml_objs> $<TARGET_OBJECTS:simplecpp_objs>)
++add_executable(cppcheck ${hdrs} ${mainfile} $<TARGET_OBJECTS:cli_objs> $<TARGET_OBJECTS:lib_objs> $<TARGET_OBJECTS:simplecpp_objs>)
+ if (HAVE_RULES)
+     target_link_libraries(cppcheck pcre)
+ endif()
+ if (MSVC)
+     target_link_libraries(cppcheck Shlwapi.lib)
+ endif()
++target_link_libraries(cppcheck tinyxml2)
+ 
+ install(TARGETS cppcheck
+     RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR}
+--- cppcheck-1.83.orig/CMakeLists.txt	2018-04-02 03:02:50.000000000 -0400
++++ cppcheck-1.83.orig/CMakeLists.txt	2018-04-12 12:45:04.959219411 -0400
+@@ -16,7 +16,6 @@ 
+     enable_testing()
+ endif()
+ 
+-add_subdirectory(externals/tinyxml)
+ add_subdirectory(externals/simplecpp)
+ add_subdirectory(lib)   # CppCheck Library 
+ add_subdirectory(cli)   # Client application
+--- cppcheck-1.83.orig/gui/CMakeLists.txt	2018-04-02 03:02:50.000000000 -0400
++++ cppcheck-1.83.orig/gui/CMakeLists.txt	2018-04-12 12:45:04.959219411 -0400
+@@ -10,7 +10,6 @@ 
+     endif()
+ 
+     include_directories(${PROJECT_SOURCE_DIR}/lib/)
+-    include_directories(SYSTEM ${PROJECT_SOURCE_DIR}/externals/tinyxml/)
+ 
+     file(GLOB hdrs "*.h")
+     file(GLOB srcs "*.cpp")
+@@ -20,10 +19,11 @@ 
+     QT5_ADD_RESOURCES(resources "gui.qrc")
+     QT5_ADD_TRANSLATION(qms ${tss})
+ 
+-    add_executable(cppcheck-gui ${hdrs} ${srcs} ${uis_hdrs} ${resources} ${qms} $<TARGET_OBJECTS:lib_objs> $<TARGET_OBJECTS:tinyxml_objs> $<TARGET_OBJECTS:simplecpp_objs>)
++    add_executable(cppcheck-gui ${hdrs} ${srcs} ${uis_hdrs} ${resources} ${qms} $<TARGET_OBJECTS:lib_objs> $<TARGET_OBJECTS:simplecpp_objs>)
+     if (HAVE_RULES)
+         target_link_libraries(cppcheck-gui pcre)
+     endif()
++    target_link_libraries(cppcheck-gui tinyxml2)
+     qt5_use_modules(cppcheck-gui ${GUI_QT_COMPONENTS})
+ 
+     install(TARGETS cppcheck-gui RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR} COMPONENT applications)
+--- cppcheck-1.83.orig/test/CMakeLists.txt	2018-04-02 03:02:50.000000000 -0400
++++ cppcheck-1.83.orig/test/CMakeLists.txt	2018-04-12 12:45:04.959219411 -0400
+@@ -1,16 +1,16 @@ 
+ if (BUILD_TESTS)
+ 
+     include_directories(${PROJECT_SOURCE_DIR}/lib/ ${PROJECT_SOURCE_DIR}/cli/)
+-    include_directories(SYSTEM ${PROJECT_SOURCE_DIR}/externals/tinyxml)
+     include_directories(${PROJECT_SOURCE_DIR}/externals/simplecpp/)
+ 
+     file(GLOB hdrs "*.h")
+     file(GLOB srcs "*.cpp")
+ 
+-    add_executable(testrunner ${hdrs} ${srcs} $<TARGET_OBJECTS:lib_objs> $<TARGET_OBJECTS:cli_objs> $<TARGET_OBJECTS:tinyxml_objs> $<TARGET_OBJECTS:simplecpp_objs>)
++    add_executable(testrunner ${hdrs} ${srcs} $<TARGET_OBJECTS:lib_objs> $<TARGET_OBJECTS:cli_objs> $<TARGET_OBJECTS:simplecpp_objs>)
+     if (HAVE_RULES)
+         target_link_libraries(testrunner pcre)
+     endif()
++    target_link_libraries(testrunner tinyxml2)
+ 
+     add_custom_target(copy_cfg ALL
+         COMMENT "Copying cfg files")

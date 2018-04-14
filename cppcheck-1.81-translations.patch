@@ -1,8 +1,8 @@
-diff -up cppcheck-1.79/gui/CMakeLists.txt.translations cppcheck-1.79/gui/CMakeLists.txt
---- cppcheck-1.79/gui/CMakeLists.txt.translations	2017-05-18 05:09:44.643624491 +0200
-+++ cppcheck-1.79/gui/CMakeLists.txt	2017-05-18 05:09:44.651624352 +0200
-@@ -29,7 +29,7 @@ if (BUILD_GUI)
-     target_link_libraries(cppcheck-gui tinyxml2)
+diff -up cppcheck-1.81/gui/CMakeLists.txt.translations cppcheck-1.81/gui/CMakeLists.txt
+--- cppcheck-1.81/gui/CMakeLists.txt.translations	2017-10-18 16:41:50.647580110 +0200
++++ cppcheck-1.81/gui/CMakeLists.txt	2017-10-18 16:42:38.432882931 +0200
+@@ -27,7 +27,7 @@ if (BUILD_GUI)
+     qt5_use_modules(cppcheck-gui ${GUI_QT_COMPONENTS})
  
      install(TARGETS cppcheck-gui RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR} COMPONENT applications)
 -    install(FILES ${qms} DESTINATION ${CMAKE_INSTALL_FULL_BINDIR} COMPONENT applications)
@@ -10,10 +10,10 @@ diff -up cppcheck-1.79/gui/CMakeLists.txt.translations cppcheck-1.79/gui/CMakeLi
  
      install(FILES cppcheck-gui.desktop DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications)
  
-diff -up cppcheck-1.79/gui/translationhandler.cpp.translations cppcheck-1.79/gui/translationhandler.cpp
---- cppcheck-1.79/gui/translationhandler.cpp.translations	2017-05-18 05:09:44.649624387 +0200
-+++ cppcheck-1.79/gui/translationhandler.cpp	2017-05-18 05:14:16.716915424 +0200
-@@ -116,15 +116,7 @@ bool TranslationHandler::SetLanguage(con
+diff -up cppcheck-1.81/gui/translationhandler.cpp.translations cppcheck-1.81/gui/translationhandler.cpp
+--- cppcheck-1.81/gui/translationhandler.cpp.translations	2017-10-07 23:11:39.000000000 +0200
++++ cppcheck-1.81/gui/translationhandler.cpp	2017-10-18 16:41:50.649580081 +0200
+@@ -116,15 +116,7 @@ bool TranslationHandler::setLanguage(con
      if (datadir.isEmpty())
          datadir = appPath;
  
