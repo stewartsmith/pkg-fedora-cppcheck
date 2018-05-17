@@ -1,12 +1,9 @@
-%if 0%{?fedora} > 0
+# Gui built in all branches
 %global gui 1
-%else
-%global gui 0
-%endif
 
 Name:           cppcheck
 Version:        1.83
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Tool for static C/C++ code analysis
 Group:          Development/Languages
 License:        GPLv3+
@@ -22,14 +19,20 @@ Patch2:         cppcheck-1.78-cfgdir.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  pcre-devel
-BuildRequires:  tinyxml2-devel >= 2.1.0
 BuildRequires:  docbook-style-xsl
 BuildRequires:  libxslt
 BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
+BuildRequires:  tinyxml2-devel >= 2.1.0
 
 %if %{gui}
+%if 0%{?rhel} == 7
+# no qt5-devel metapackage!
+BuildRequires: qt5-qtbase-devel
+BuildRequires: qt5-linguist
+%else
 BuildRequires:  qt5-devel
+%endif
 %else
 Obsoletes:      %{name}-gui < %{version}-%{release}
 %endif
@@ -106,6 +109,9 @@ cd objdir-%{_target_platform}/bin
 %endif
 
 %changelog
+* Thu May 17 2018 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.83-2
+- Qt5 is available on RHEL 7 after all, re-enable gui in EPEL 7.
+
 * Sat Apr 14 2018 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.83-1
 - GUI no longer available on RHEL 7 due to Qt5 dependency.
 - Update to 1.83.
