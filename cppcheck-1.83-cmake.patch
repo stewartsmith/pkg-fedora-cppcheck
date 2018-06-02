@@ -1,6 +1,6 @@
 diff -up cppcheck-1.83/CMakeLists.txt.qt5cmake cppcheck-1.83/CMakeLists.txt
---- cppcheck-1.83/CMakeLists.txt.qt5cmake	2018-06-02 14:01:44.339998373 +0200
-+++ cppcheck-1.83/CMakeLists.txt	2018-06-02 14:01:44.370997858 +0200
+--- cppcheck-1.83/CMakeLists.txt.qt5cmake	2018-06-02 16:47:11.038242820 +0200
++++ cppcheck-1.83/CMakeLists.txt	2018-06-02 16:47:11.070242301 +0200
 @@ -1,5 +1,5 @@
  project(CppCheck)
 -cmake_minimum_required(VERSION 2.8.4)
@@ -9,15 +9,15 @@ diff -up cppcheck-1.83/CMakeLists.txt.qt5cmake cppcheck-1.83/CMakeLists.txt
  include(GNUInstallDirs)
  
 diff -up cppcheck-1.83/gui/CMakeLists.txt.qt5cmake cppcheck-1.83/gui/CMakeLists.txt
---- cppcheck-1.83/gui/CMakeLists.txt.qt5cmake	2018-06-02 14:01:44.372997824 +0200
-+++ cppcheck-1.83/gui/CMakeLists.txt	2018-06-02 14:02:04.869656720 +0200
+--- cppcheck-1.83/gui/CMakeLists.txt.qt5cmake	2018-06-02 16:47:11.049242641 +0200
++++ cppcheck-1.83/gui/CMakeLists.txt	2018-06-02 16:47:24.622022436 +0200
 @@ -24,8 +24,8 @@ if (BUILD_GUI)
          target_link_libraries(cppcheck-gui pcre)
      endif()
      target_link_libraries(cppcheck-gui tinyxml2)
 -    qt5_use_modules(cppcheck-gui ${GUI_QT_COMPONENTS})
 -
-+    target_link_libraries(cppcheck-gui Qt5::Core Qt5::Gui Qt5::Widgets Qt5::PrintSupport Qt5::LinguistTools)
++    target_link_libraries(cppcheck-gui Qt5::Core Qt5::Gui Qt5::Widgets Qt5::PrintSupport)
 +    
      install(TARGETS cppcheck-gui RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR} COMPONENT applications)
      install(FILES ${qms} DESTINATION share/${PROJECT_NAME}/lang/ COMPONENT applications)
