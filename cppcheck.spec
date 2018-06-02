@@ -6,9 +6,8 @@
 
 Name:           cppcheck
 Version:        1.83
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Tool for static C/C++ code analysis
-Group:          Development/Languages
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
@@ -44,12 +43,25 @@ errors in the code (i.e. have zero false positives).
 %if %{gui}
 %package gui
 Summary:        Graphical user interface for cppcheck
-Group:          Applications/Engineering
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description gui
 This package contains the graphical user interface for cppcheck.
 %endif
+
+%package htmlreport
+Summary:        HTML reporting for cppcheck
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+%if 0%{?rhel} > 0 && 0%{?rhel} < 8
+# RHEL packages aren't versioned
+Requires:       python-pygments
+%else
+Requires:       python2-pygments
+%endif
+
+%description htmlreport
+This package contains the Python utility for generating html reports
+from xml files first generated using cppcheck.
 
 %prep
 %setup -q
@@ -86,6 +98,10 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/cppcheck-gui.desktop
 install -D -p -m 644 gui/cppcheck-gui.png %{buildroot}%{_datadir}/pixmaps/cppcheck-gui.png
 %endif
 
+# Install htmlreport
+install -D -p -m 755 htmlreport/cppcheck-htmlreport %{buildroot}%{_bindir}/cppcheck-htmlreport
+
+
 %check
 cd objdir-%{_target_platform}/bin
 ./testrunner -g -q
@@ -105,7 +121,13 @@ cd objdir-%{_target_platform}/bin
 %{_datadir}/icons/hicolor/scalable/apps/cppcheck-gui.svg
 %endif
 
+%files htmlreport
+%{_bindir}/cppcheck-htmlreport
+
 %changelog
+* Sat Jun 02 2018 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.83-2
+- Add htmlreport tool.
+
 * Sat Apr 14 2018 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.83-1
 - GUI no longer available on RHEL 7 due to Qt5 dependency.
 - Update to 1.83.
