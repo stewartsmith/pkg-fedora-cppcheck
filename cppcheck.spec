@@ -18,6 +18,8 @@ Patch0:         cppcheck-1.83-tinyxml.patch
 Patch1:         cppcheck-1.81-translations.patch
 # Set location of config files
 Patch2:         cppcheck-1.78-cfgdir.patch
+# Use modern qt5 cmake
+Patch3:         cppcheck-1.83-cmake.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  pcre-devel
@@ -68,6 +70,7 @@ from xml files first generated using cppcheck.
 %patch0 -p1 -b .tinyxml
 %patch1 -p1 -b .translations
 %patch2 -p1 -b .cfgdir
+%patch3 -p1 -b .qt5cmake
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
 
