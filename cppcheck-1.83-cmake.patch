@@ -1,3 +1,17 @@
+diff -up cppcheck-1.83/cmake/findDependencies.cmake.qt5cmake cppcheck-1.83/cmake/findDependencies.cmake
+--- cppcheck-1.83/cmake/findDependencies.cmake.qt5cmake	2018-04-02 09:02:50.000000000 +0200
++++ cppcheck-1.83/cmake/findDependencies.cmake	2018-06-02 16:50:28.656036644 +0200
+@@ -1,6 +1,8 @@
+ if (BUILD_GUI)
+-    set(GUI_QT_COMPONENTS Core Gui Widgets PrintSupport)
+-    find_package(Qt5 COMPONENTS ${GUI_QT_COMPONENTS})
++    find_package(Qt5Core)
++    find_package(Qt5Gui)
++    find_package(Qt5Widgets)
++    find_package(Qt5PrintSupport)
+     find_package(Qt5LinguistTools)
+ endif()
+ 
 diff -up cppcheck-1.83/CMakeLists.txt.qt5cmake cppcheck-1.83/CMakeLists.txt
 --- cppcheck-1.83/CMakeLists.txt.qt5cmake	2018-06-02 16:47:11.038242820 +0200
 +++ cppcheck-1.83/CMakeLists.txt	2018-06-02 16:47:11.070242301 +0200
