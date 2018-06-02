@@ -3,9 +3,8 @@
 
 Name:           cppcheck
 Version:        1.83
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Tool for static C/C++ code analysis
-Group:          Development/Languages
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
@@ -16,6 +15,8 @@ Patch0:         cppcheck-1.83-tinyxml.patch
 Patch1:         cppcheck-1.81-translations.patch
 # Set location of config files
 Patch2:         cppcheck-1.78-cfgdir.patch
+# Use modern qt5 cmake
+Patch3:         cppcheck-1.83-cmake.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  pcre-devel
@@ -47,18 +48,32 @@ errors in the code (i.e. have zero false positives).
 %if %{gui}
 %package gui
 Summary:        Graphical user interface for cppcheck
-Group:          Applications/Engineering
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description gui
 This package contains the graphical user interface for cppcheck.
 %endif
 
+%package htmlreport
+Summary:        HTML reporting for cppcheck
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+%if 0%{?rhel} > 0 && 0%{?rhel} < 8
+# RHEL packages aren't versioned
+Requires:       python-pygments
+%else
+Requires:       python2-pygments
+%endif
+
+%description htmlreport
+This package contains the Python utility for generating html reports
+from xml files first generated using cppcheck.
+
 %prep
 %setup -q
 %patch0 -p1 -b .tinyxml
 %patch1 -p1 -b .translations
 %patch2 -p1 -b .cfgdir
+%patch3 -p1 -b .qt5cmake
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
 
@@ -89,6 +104,10 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/cppcheck-gui.desktop
 install -D -p -m 644 gui/cppcheck-gui.png %{buildroot}%{_datadir}/pixmaps/cppcheck-gui.png
 %endif
 
+# Install htmlreport
+install -D -p -m 755 htmlreport/cppcheck-htmlreport %{buildroot}%{_bindir}/cppcheck-htmlreport
+
+
 %check
 cd objdir-%{_target_platform}/bin
 ./testrunner -g -q
@@ -108,7 +127,13 @@ cd objdir-%{_target_platform}/bin
 %{_datadir}/icons/hicolor/scalable/apps/cppcheck-gui.svg
 %endif
 
+%files htmlreport
+%{_bindir}/cppcheck-htmlreport
+
 %changelog
+* Sat Jun 02 2018 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.83-3
+- Add htmlreport tool.
+
 * Thu May 17 2018 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.83-2
 - Qt5 is available on RHEL 7 after all, re-enable gui in EPEL 7.
 
