@@ -3,7 +3,7 @@
 
 Name:           cppcheck
 Version:        1.83
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
@@ -131,6 +131,9 @@ cd objdir-%{_target_platform}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Thu Jul 12 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.83-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
 * Sat Jun 02 2018 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.83-3
 - Add htmlreport tool.
 
