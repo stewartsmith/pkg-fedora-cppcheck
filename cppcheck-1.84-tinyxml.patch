@@ -1,12 +1,13 @@
---- cppcheck-1.83.orig/cli/CMakeLists.txt	2018-04-02 03:02:50.000000000 -0400
-+++ cppcheck-1.83.orig/cli/CMakeLists.txt	2018-04-12 12:46:04.990212969 -0400
-@@ -1,5 +1,4 @@ 
+diff -ur cppcheck-1.84.orig/cli/CMakeLists.txt cppcheck-1.84/cli/CMakeLists.txt
+--- cppcheck-1.84.orig/cli/CMakeLists.txt	2018-06-10 16:41:03.000000000 -0400
++++ cppcheck-1.84/cli/CMakeLists.txt	2018-08-13 13:11:17.191381897 -0400
+@@ -1,5 +1,4 @@
  include_directories(${PROJECT_SOURCE_DIR}/lib/)
 -include_directories(SYSTEM ${PROJECT_SOURCE_DIR}/externals/tinyxml/)
  include_directories(${PROJECT_SOURCE_DIR}/externals/simplecpp/)
  
  file(GLOB hdrs "*.h")
-@@ -8,13 +7,14 @@ 
+@@ -8,13 +7,14 @@
  list(REMOVE_ITEM srcs ${mainfile})
  
  add_library(cli_objs OBJECT ${hdrs} ${srcs}) 
@@ -22,9 +23,12 @@
  
  install(TARGETS cppcheck
      RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR}
---- cppcheck-1.83.orig/CMakeLists.txt	2018-04-02 03:02:50.000000000 -0400
-+++ cppcheck-1.83.orig/CMakeLists.txt	2018-04-12 12:45:04.959219411 -0400
-@@ -16,7 +16,6 @@ 
+Only in cppcheck-1.84/cli: CMakeLists.txt.orig
+Only in cppcheck-1.84/cli: CMakeLists.txt.rej
+diff -ur cppcheck-1.84.orig/CMakeLists.txt cppcheck-1.84/CMakeLists.txt
+--- cppcheck-1.84.orig/CMakeLists.txt	2018-06-10 16:41:03.000000000 -0400
++++ cppcheck-1.84/CMakeLists.txt	2018-08-13 13:09:05.904395985 -0400
+@@ -16,7 +16,6 @@
      enable_testing()
  endif()
  
@@ -32,9 +36,12 @@
  add_subdirectory(externals/simplecpp)
  add_subdirectory(lib)   # CppCheck Library 
  add_subdirectory(cli)   # Client application
---- cppcheck-1.83.orig/gui/CMakeLists.txt	2018-04-02 03:02:50.000000000 -0400
-+++ cppcheck-1.83.orig/gui/CMakeLists.txt	2018-04-12 12:45:04.959219411 -0400
-@@ -10,7 +10,6 @@ 
+Only in cppcheck-1.84: .codacy.yml
+Only in cppcheck-1.84: .gitignore
+diff -ur cppcheck-1.84.orig/gui/CMakeLists.txt cppcheck-1.84/gui/CMakeLists.txt
+--- cppcheck-1.84.orig/gui/CMakeLists.txt	2018-06-10 16:41:03.000000000 -0400
++++ cppcheck-1.84/gui/CMakeLists.txt	2018-08-13 13:13:52.843365194 -0400
+@@ -10,7 +10,6 @@
      endif()
  
      include_directories(${PROJECT_SOURCE_DIR}/lib/)
@@ -42,7 +49,7 @@
  
      file(GLOB hdrs "*.h")
      file(GLOB srcs "*.cpp")
-@@ -20,10 +19,11 @@ 
+@@ -20,11 +19,11 @@
      QT5_ADD_RESOURCES(resources "gui.qrc")
      QT5_ADD_TRANSLATION(qms ${tss})
  
@@ -51,13 +58,18 @@
      if (HAVE_RULES)
          target_link_libraries(cppcheck-gui pcre)
      endif()
-+    target_link_libraries(cppcheck-gui tinyxml2)
-     qt5_use_modules(cppcheck-gui ${GUI_QT_COMPONENTS})
+-    target_link_libraries(cppcheck-gui Qt5::Core Qt5::Gui Qt5::Widgets Qt5::PrintSupport)
++    target_link_libraries(cppcheck-gui tinyxml2 Qt5::Core Qt5::Gui Qt5::Widgets Qt5::PrintSupport)
  
      install(TARGETS cppcheck-gui RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR} COMPONENT applications)
---- cppcheck-1.83.orig/test/CMakeLists.txt	2018-04-02 03:02:50.000000000 -0400
-+++ cppcheck-1.83.orig/test/CMakeLists.txt	2018-04-12 12:45:04.959219411 -0400
-@@ -1,16 +1,16 @@ 
+     install(FILES ${qms} DESTINATION ${CMAKE_INSTALL_FULL_BINDIR} COMPONENT applications)
+Only in cppcheck-1.84/gui: CMakeLists.txt.orig
+Only in cppcheck-1.84/gui: CMakeLists.txt.rej
+Only in cppcheck-1.84: .mailmap
+diff -ur cppcheck-1.84.orig/test/CMakeLists.txt cppcheck-1.84/test/CMakeLists.txt
+--- cppcheck-1.84.orig/test/CMakeLists.txt	2018-06-10 16:41:03.000000000 -0400
++++ cppcheck-1.84/test/CMakeLists.txt	2018-08-13 13:09:05.949395981 -0400
+@@ -1,16 +1,16 @@
  if (BUILD_TESTS)
  
      include_directories(${PROJECT_SOURCE_DIR}/lib/ ${PROJECT_SOURCE_DIR}/cli/)
@@ -76,3 +88,6 @@
  
      add_custom_target(copy_cfg ALL
          COMMENT "Copying cfg files")
+Only in cppcheck-1.84: .travis_llvmcheck_suppressions
+Only in cppcheck-1.84: .travis_suppressions
+Only in cppcheck-1.84: .travis.yml
