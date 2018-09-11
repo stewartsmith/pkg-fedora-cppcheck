@@ -71,7 +71,6 @@ from xml files first generated using cppcheck.
 %patch0 -p1 -b .tinyxml
 %patch1 -p1 -b .translations
 %patch2 -p1 -b .cfgdir
-%patch3 -p1 -b .qt5cmake
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
 
