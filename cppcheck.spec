@@ -15,8 +15,6 @@ Patch0:         cppcheck-1.84-tinyxml.patch
 Patch1:         cppcheck-1.84-translations.patch
 # Set location of config files
 Patch2:         cppcheck-1.78-cfgdir.patch
-# Use modern qt5 cmake
-Patch3:         cppcheck-1.83-cmake.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  pcre-devel
