@@ -1,6 +1,6 @@
-diff -ur cppcheck-1.84.orig/cli/CMakeLists.txt cppcheck-1.84/cli/CMakeLists.txt
---- cppcheck-1.84.orig/cli/CMakeLists.txt	2018-06-10 16:41:03.000000000 -0400
-+++ cppcheck-1.84/cli/CMakeLists.txt	2018-08-13 13:11:17.191381897 -0400
+diff -ur cppcheck-1.85.orig/cli/CMakeLists.txt cppcheck-1.85/cli/CMakeLists.txt
+--- cppcheck-1.85.orig/cli/CMakeLists.txt	2018-10-14 14:56:51.000000000 +0200
++++ cppcheck-1.85/cli/CMakeLists.txt	2018-11-08 15:31:17.285998825 +0100
 @@ -1,5 +1,4 @@
  include_directories(${PROJECT_SOURCE_DIR}/lib/)
 -include_directories(SYSTEM ${PROJECT_SOURCE_DIR}/externals/tinyxml/)
@@ -16,18 +16,16 @@ diff -ur cppcheck-1.84.orig/cli/CMakeLists.txt cppcheck-1.84/cli/CMakeLists.txt
  if (HAVE_RULES)
      target_link_libraries(cppcheck pcre)
  endif()
- if (MSVC)
+ if (WIN32 AND NOT BORLAND)
      target_link_libraries(cppcheck Shlwapi.lib)
  endif()
 +target_link_libraries(cppcheck tinyxml2)
  
  install(TARGETS cppcheck
      RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR}
-Only in cppcheck-1.84/cli: CMakeLists.txt.orig
-Only in cppcheck-1.84/cli: CMakeLists.txt.rej
-diff -ur cppcheck-1.84.orig/CMakeLists.txt cppcheck-1.84/CMakeLists.txt
---- cppcheck-1.84.orig/CMakeLists.txt	2018-06-10 16:41:03.000000000 -0400
-+++ cppcheck-1.84/CMakeLists.txt	2018-08-13 13:09:05.904395985 -0400
+diff -ur cppcheck-1.85.orig/CMakeLists.txt cppcheck-1.85/CMakeLists.txt
+--- cppcheck-1.85.orig/CMakeLists.txt	2018-10-14 14:56:51.000000000 +0200
++++ cppcheck-1.85/CMakeLists.txt	2018-11-08 15:28:12.574001686 +0100
 @@ -16,7 +16,6 @@
      enable_testing()
  endif()
@@ -36,11 +34,9 @@ diff -ur cppcheck-1.84.orig/CMakeLists.txt cppcheck-1.84/CMakeLists.txt
  add_subdirectory(externals/simplecpp)
  add_subdirectory(lib)   # CppCheck Library 
  add_subdirectory(cli)   # Client application
-Only in cppcheck-1.84: .codacy.yml
-Only in cppcheck-1.84: .gitignore
-diff -ur cppcheck-1.84.orig/gui/CMakeLists.txt cppcheck-1.84/gui/CMakeLists.txt
---- cppcheck-1.84.orig/gui/CMakeLists.txt	2018-06-10 16:41:03.000000000 -0400
-+++ cppcheck-1.84/gui/CMakeLists.txt	2018-08-13 13:13:52.843365194 -0400
+diff -ur cppcheck-1.85.orig/gui/CMakeLists.txt cppcheck-1.85/gui/CMakeLists.txt
+--- cppcheck-1.85.orig/gui/CMakeLists.txt	2018-10-14 14:56:51.000000000 +0200
++++ cppcheck-1.85/gui/CMakeLists.txt	2018-11-08 15:28:12.575001686 +0100
 @@ -10,7 +10,6 @@
      endif()
  
@@ -63,12 +59,9 @@ diff -ur cppcheck-1.84.orig/gui/CMakeLists.txt cppcheck-1.84/gui/CMakeLists.txt
  
      install(TARGETS cppcheck-gui RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR} COMPONENT applications)
      install(FILES ${qms} DESTINATION ${CMAKE_INSTALL_FULL_BINDIR} COMPONENT applications)
-Only in cppcheck-1.84/gui: CMakeLists.txt.orig
-Only in cppcheck-1.84/gui: CMakeLists.txt.rej
-Only in cppcheck-1.84: .mailmap
-diff -ur cppcheck-1.84.orig/test/CMakeLists.txt cppcheck-1.84/test/CMakeLists.txt
---- cppcheck-1.84.orig/test/CMakeLists.txt	2018-06-10 16:41:03.000000000 -0400
-+++ cppcheck-1.84/test/CMakeLists.txt	2018-08-13 13:09:05.949395981 -0400
+diff -ur cppcheck-1.85.orig/test/CMakeLists.txt cppcheck-1.85/test/CMakeLists.txt
+--- cppcheck-1.85.orig/test/CMakeLists.txt	2018-10-14 14:56:51.000000000 +0200
++++ cppcheck-1.85/test/CMakeLists.txt	2018-11-08 15:28:12.575001686 +0100
 @@ -1,16 +1,16 @@
  if (BUILD_TESTS)
  
@@ -88,6 +81,3 @@ diff -ur cppcheck-1.84.orig/test/CMakeLists.txt cppcheck-1.84/test/CMakeLists.tx
  
      add_custom_target(copy_cfg ALL
          COMMENT "Copying cfg files")
-Only in cppcheck-1.84: .travis_llvmcheck_suppressions
-Only in cppcheck-1.84: .travis_suppressions
-Only in cppcheck-1.84: .travis.yml

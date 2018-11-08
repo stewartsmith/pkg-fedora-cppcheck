@@ -2,7 +2,7 @@
 %global gui 1
 
 Name:           cppcheck
-Version:        1.84
+Version:        1.85
 Release:        1%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
@@ -10,7 +10,7 @@ URL:            http://cppcheck.wiki.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 
 # Use system tinyxml2
-Patch0:         cppcheck-1.84-tinyxml.patch
+Patch0:         cppcheck-1.85-tinyxml.patch
 # Fix location of translations
 Patch1:         cppcheck-1.84-translations.patch
 # Set location of config files
@@ -85,7 +85,7 @@ xsltproc --nonet -o man/manual.html \
 mkdir objdir-%{_target_platform}
 cd objdir-%{_target_platform}
 # Upstream doesn't support shared libraries (unversioned solib)
-%cmake .. -DCMAKE_BUILD_TYPE=Release -DHAVE_RULES=1 -DBUILD_GUI=%{gui} -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=1 -DCFGDIR=%{_datadir}/CppCheck
+%cmake .. -DCMAKE_BUILD_TYPE=Release -DHAVE_RULES=1 -DBUILD_GUI=%{gui} -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=1 -DCFGDIR=%{_datadir}/Cppcheck
 # SMP make doesn't seem to work
 make cppcheck
 
@@ -111,7 +111,7 @@ cd objdir-%{_target_platform}/bin
 
 %files
 %doc AUTHORS COPYING man/manual.html
-%{_datadir}/CppCheck/
+%{_datadir}/Cppcheck/
 %{_bindir}/cppcheck
 %{_mandir}/man1/cppcheck.1*
 
@@ -128,6 +128,9 @@ cd objdir-%{_target_platform}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Thu Nov 08 2018 Steve Grubb <sgrubb@redhat.com> - 1.85-1
+- Update to 1.85.
+
 * Tue Sep 11 2018 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.84-1
 - Update to 1.84.
 
