@@ -15,6 +15,8 @@ Patch0:         cppcheck-1.85-tinyxml.patch
 Patch1:         cppcheck-1.84-translations.patch
 # Set location of config files
 Patch2:         cppcheck-1.78-cfgdir.patch
+# Select python2 explicitly
+Patch3:         cppcheck-1.85-htmlreport-python2.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  pcre-devel
@@ -71,6 +73,7 @@ from xml files first generated using cppcheck.
 %patch0 -p1 -b .tinyxml
 %patch1 -p1 -b .translations
 %patch2 -p1 -b .cfgdir
+%patch3 -p1 -b .python2
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
 
