@@ -3,7 +3,7 @@
 
 Name:           cppcheck
 Version:        1.85
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
@@ -131,6 +131,9 @@ cd objdir-%{_target_platform}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Tue Nov 27 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.85-2
+- Rebuild for tinyxml2 7.x
+
 * Thu Nov 08 2018 Steve Grubb <sgrubb@redhat.com> - 1.85-1
 - Update to 1.85.
 
