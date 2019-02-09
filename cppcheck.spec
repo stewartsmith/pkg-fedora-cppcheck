@@ -2,19 +2,19 @@
 %global gui 1
 
 Name:           cppcheck
-Version:        1.86
-Release:        2%{?dist}
+Version:        1.87
+Release:        1%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 
 # Use system tinyxml2
-Patch0:         cppcheck-1.85-tinyxml.patch
+Patch0:         cppcheck-1.87-tinyxml.patch
 # Fix location of translations
 Patch1:         cppcheck-1.84-translations.patch
 # Set location of config files
-Patch2:         cppcheck-1.78-cfgdir.patch
+Patch2:         cppcheck-1.87-cfgdir.patch
 # Select python2 explicitly
 Patch3:         cppcheck-1.85-htmlreport-python2.patch
 
@@ -132,6 +132,9 @@ cd objdir-%{_target_platform}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Sat Feb 09 2019 Steve Grubb <sgrubb@redhat.com> - 1.87-1
+- Update to 1.87.
+
 * Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.86-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
