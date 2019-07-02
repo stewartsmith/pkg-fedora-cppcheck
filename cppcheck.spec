@@ -2,7 +2,7 @@
 %global gui 1
 
 Name:           cppcheck
-Version:        1.87
+Version:        1.88
 Release:        1%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
@@ -10,9 +10,9 @@ URL:            http://cppcheck.wiki.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 
 # Use system tinyxml2
-Patch0:         cppcheck-1.87-tinyxml.patch
+Patch0:         cppcheck-1.88-tinyxml.patch
 # Fix location of translations
-Patch1:         cppcheck-1.84-translations.patch
+Patch1:         cppcheck-1.88-translations.patch
 # Set location of config files
 Patch2:         cppcheck-1.87-cfgdir.patch
 # Select python2 explicitly
@@ -132,6 +132,9 @@ cd objdir-%{_target_platform}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Mon Jul 01 2019 Steve Grubb <sgrubb@redhat.com> - 1.88-1
+- Update to 1.88
+
 * Sat Feb 09 2019 Steve Grubb <sgrubb@redhat.com> - 1.87-1
 - Update to 1.87.
 

@@ -1,6 +1,6 @@
-diff -urp cppcheck-1.87.orig/cli/CMakeLists.txt cppcheck-1.87/cli/CMakeLists.txt
---- cppcheck-1.87.orig/cli/CMakeLists.txt	2019-02-09 03:31:27.000000000 -0500
-+++ cppcheck-1.87/cli/CMakeLists.txt	2019-02-09 13:31:37.543470390 -0500
+diff -urp cppcheck-1.88.orig/cli/CMakeLists.txt cppcheck-1.88/cli/CMakeLists.txt
+--- cppcheck-1.88.orig/cli/CMakeLists.txt	2019-06-29 03:51:25.000000000 -0400
++++ cppcheck-1.88/cli/CMakeLists.txt	2019-07-01 20:38:10.056775258 -0400
 @@ -1,5 +1,4 @@
  include_directories(${PROJECT_SOURCE_DIR}/lib/)
 -include_directories(SYSTEM ${PROJECT_SOURCE_DIR}/externals/tinyxml/)
@@ -24,10 +24,10 @@ diff -urp cppcheck-1.87.orig/cli/CMakeLists.txt cppcheck-1.87/cli/CMakeLists.txt
  
  install(TARGETS cppcheck
      RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR}
-diff -urp cppcheck-1.87.orig/CMakeLists.txt cppcheck-1.87/CMakeLists.txt
---- cppcheck-1.87.orig/CMakeLists.txt	2019-02-09 03:31:27.000000000 -0500
-+++ cppcheck-1.87/CMakeLists.txt	2019-02-09 13:30:01.410480706 -0500
-@@ -16,7 +16,6 @@ if (BUILD_TESTS)
+diff -urp cppcheck-1.88.orig/CMakeLists.txt cppcheck-1.88/CMakeLists.txt
+--- cppcheck-1.88.orig/CMakeLists.txt	2019-06-29 03:51:25.000000000 -0400
++++ cppcheck-1.88/CMakeLists.txt	2019-07-01 20:38:10.078775256 -0400
+@@ -19,7 +19,6 @@ if (BUILD_TESTS)
      enable_testing()
  endif()
  
@@ -35,9 +35,9 @@ diff -urp cppcheck-1.87.orig/CMakeLists.txt cppcheck-1.87/CMakeLists.txt
  add_subdirectory(externals/simplecpp)
  add_subdirectory(lib)   # CppCheck Library 
  add_subdirectory(cli)   # Client application
-diff -urp cppcheck-1.87.orig/gui/CMakeLists.txt cppcheck-1.87/gui/CMakeLists.txt
---- cppcheck-1.87.orig/gui/CMakeLists.txt	2019-02-09 03:31:27.000000000 -0500
-+++ cppcheck-1.87/gui/CMakeLists.txt	2019-02-09 13:30:01.410480706 -0500
+diff -urp cppcheck-1.88.orig/gui/CMakeLists.txt cppcheck-1.88/gui/CMakeLists.txt
+--- cppcheck-1.88.orig/gui/CMakeLists.txt	2019-06-29 03:51:25.000000000 -0400
++++ cppcheck-1.88/gui/CMakeLists.txt	2019-07-01 20:41:48.862751778 -0400
 @@ -10,7 +10,6 @@ if (BUILD_GUI)
      endif()
  
@@ -57,12 +57,12 @@ diff -urp cppcheck-1.87.orig/gui/CMakeLists.txt cppcheck-1.87/gui/CMakeLists.txt
      endif()
 -    target_link_libraries(cppcheck-gui Qt5::Core Qt5::Gui Qt5::Widgets Qt5::PrintSupport)
 +    target_link_libraries(cppcheck-gui tinyxml2 Qt5::Core Qt5::Gui Qt5::Widgets Qt5::PrintSupport)
- 
-     install(TARGETS cppcheck-gui RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR} COMPONENT applications)
-     install(FILES ${qms} DESTINATION ${CMAKE_INSTALL_FULL_BINDIR} COMPONENT applications)
-diff -urp cppcheck-1.87.orig/test/CMakeLists.txt cppcheck-1.87/test/CMakeLists.txt
---- cppcheck-1.87.orig/test/CMakeLists.txt	2019-02-09 03:31:27.000000000 -0500
-+++ cppcheck-1.87/test/CMakeLists.txt	2019-02-09 13:30:01.410480706 -0500
+     if(WITH_QCHART)
+         target_compile_definitions (cppcheck-gui PRIVATE HAVE_QCHART )
+         target_link_libraries(cppcheck-gui Qt5::Charts)
+diff -urp cppcheck-1.88.orig/test/CMakeLists.txt cppcheck-1.88/test/CMakeLists.txt
+--- cppcheck-1.88.orig/test/CMakeLists.txt	2019-06-29 03:51:25.000000000 -0400
++++ cppcheck-1.88/test/CMakeLists.txt	2019-07-01 20:43:12.299742824 -0400
 @@ -1,16 +1,16 @@
  if (BUILD_TESTS)
  
