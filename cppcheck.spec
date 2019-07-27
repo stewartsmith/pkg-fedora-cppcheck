@@ -3,7 +3,7 @@
 
 Name:           cppcheck
 Version:        1.88
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
@@ -17,6 +17,9 @@ Patch1:         cppcheck-1.88-translations.patch
 Patch2:         cppcheck-1.87-cfgdir.patch
 # Select python2 explicitly
 Patch3:         cppcheck-1.85-htmlreport-python2.patch
+
+# BZ #1733663
+Patch4:         https://github.com/danmar/cppcheck/pull/1939.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  pcre-devel
@@ -75,6 +78,7 @@ from xml files first generated using cppcheck.
 %patch1 -p1 -b .translations
 %patch2 -p1 -b .cfgdir
 %patch3 -p1 -b .python2
+%patch4 -p1 -b .bz1733663
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
 
@@ -132,6 +136,9 @@ cd objdir-%{_target_platform}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Sat Jul 27 2019 Susi Lehtola <jussilehtola@redhat.com> - 1.89-3
+- Fix BZ #1733663.
+
 * Wed Jul 24 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.88-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
