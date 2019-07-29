@@ -20,6 +20,8 @@ Patch3:         cppcheck-1.85-htmlreport-python2.patch
 
 # BZ #1733663
 Patch4:         https://github.com/danmar/cppcheck/pull/1939.patch
+# BZ #1733663
+Patch5:         https://github.com/danmar/cppcheck/pull/1943.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  pcre-devel
@@ -78,7 +80,8 @@ from xml files first generated using cppcheck.
 %patch1 -p1 -b .translations
 %patch2 -p1 -b .cfgdir
 %patch3 -p1 -b .python2
-%patch4 -p1 -b .bz1733663
+%patch4 -p1 -b .bz1733663a
+%patch5 -p1 -b .bz1733663b
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
 
@@ -136,6 +139,9 @@ cd objdir-%{_target_platform}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Mon Jul 29 2019 Susi Lehtola <jussilehtola@redhat.com> - 1.89-4
+- Second patch for another issue in BZ #1733663.
+
 * Sat Jul 27 2019 Susi Lehtola <jussilehtola@redhat.com> - 1.89-3
 - Fix BZ #1733663.
 

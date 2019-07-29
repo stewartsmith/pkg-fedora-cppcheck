@@ -1,0 +1,100 @@
+From e1f980c0e98540cdf0f4210c71dbd7f2d916abe7 Mon Sep 17 00:00:00 2001
+From: Robert Reif <reif@FX6840>
+Date: Mon, 1 Jul 2019 19:43:23 -0400
+Subject: [PATCH] Fixed #9193 (functionStatic false positive (inconclusive))
+
+---
+ lib/templatesimplifier.cpp    |  4 +++-
+ test/testclass.cpp            | 15 +++++++++++++++
+ test/testsimplifytemplate.cpp | 11 +++++++++++
+ 3 files changed, 29 insertions(+), 1 deletion(-)
+
+diff --git a/lib/templatesimplifier.cpp b/lib/templatesimplifier.cpp
+index 0e0423691f..893849743a 100644
+--- a/lib/templatesimplifier.cpp
++++ b/lib/templatesimplifier.cpp
+@@ -1094,19 +1094,21 @@ void TemplateSimplifier::useDefaultArgumentValues(TokenAndName &declaration)
+             continue;
+         if (end != instantiation.token->tokAt(2))
+             instantiationArgs.resize(1);
+-        for (const Token *tok1 = instantiation.token->tokAt(2); tok1 && tok1!= end; tok1 = tok1->next()) {
++        for (const Token *tok1 = instantiation.token->tokAt(2); tok1 && tok1 != end; tok1 = tok1->next()) {
+             if (tok1->link() && Token::Match(tok1, "{|(|[")) {
+                 const Token *endLink = tok1->link();
+                 do {
+                     instantiationArgs[index].push_back(tok1);
+                     tok1 = tok1->next();
+                 } while (tok1 && tok1 != endLink);
++                instantiationArgs[index].push_back(tok1);
+             } else if (tok1->str() == "<" && (tok1->strAt(1) == ">" || templateParameters(tok1))) {
+                 const Token *endLink = tok1->findClosingBracket();
+                 do {
+                     instantiationArgs[index].push_back(tok1);
+                     tok1 = tok1->next();
+                 } while (tok1 && tok1 != endLink);
++                instantiationArgs[index].push_back(tok1);
+             } else if (tok1->str() == ",") {
+                 ++index;
+                 instantiationArgs.resize(index + 1);
+diff --git a/test/testclass.cpp b/test/testclass.cpp
+index f0ac9cc747..0e0a86d198 100644
+--- a/test/testclass.cpp
++++ b/test/testclass.cpp
+@@ -174,6 +174,7 @@ class TestClass : public TestFixture {
+         TEST_CASE(const64); // ticket #6268
+         TEST_CASE(const65); // ticket #8693
+         TEST_CASE(const66); // ticket #7714
++        TEST_CASE(const67); // ticket #9193
+         TEST_CASE(const_handleDefaultParameters);
+         TEST_CASE(const_passThisToMemberOfOtherClass);
+         TEST_CASE(assigningPointerToPointerIsNotAConstOperation);
+@@ -5661,6 +5662,20 @@ class TestClass : public TestFixture {
+         ASSERT_EQUALS("", errout.str());
+     }
+ 
++    void const67() { // #9193
++        checkConst("template <class VALUE_T, class LIST_T = std::list<VALUE_T> >\n"
++                   "class TestList {\n"
++                   "public:\n"
++                   "    LIST_T m_list;\n"
++                   "};\n"
++                   "class Test {\n"
++                   "public:\n"
++                   "    const std::list<std::shared_ptr<int>>& get() { return m_test.m_list; }\n"
++                   "    TestList<std::shared_ptr<int>> m_test;\n"
++                   "};\n");
++        ASSERT_EQUALS("[test.cpp:8]: (style, inconclusive) Technically the member function 'Test::get' can be const.\n", errout.str());
++    }
++
+     void const_handleDefaultParameters() {
+         checkConst("struct Foo {\n"
+                    "    void foo1(int i, int j = 0) {\n"
+diff --git a/test/testsimplifytemplate.cpp b/test/testsimplifytemplate.cpp
+index bcfcebd03c..337391571e 100644
+--- a/test/testsimplifytemplate.cpp
++++ b/test/testsimplifytemplate.cpp
+@@ -158,6 +158,7 @@ class TestSimplifyTemplate : public TestFixture {
+         TEST_CASE(template118);
+         TEST_CASE(template119); // #9186
+         TEST_CASE(template120);
++        TEST_CASE(template121); // #9193
+         TEST_CASE(template_specialization_1);  // #7868 - template specialization template <typename T> struct S<C<T>> {..};
+         TEST_CASE(template_specialization_2);  // #7868 - template specialization template <typename T> struct S<C<T>> {..};
+         TEST_CASE(template_enum);  // #6299 Syntax error in complex enum declaration (including template)
+@@ -2849,6 +2850,16 @@ class TestSimplifyTemplate : public TestFixture {
+         ASSERT_EQUALS(exp, tok(code));
+     }
+ 
++    void template121() { // #9193
++        const char code[] = "template <class VALUE_T, class LIST_T = std::list<VALUE_T>>\n"
++                            "class TestList { };\n"
++                            "TestList<std::shared_ptr<int>> m_test;";
++        const char exp[] = "class TestList<std::shared_ptr<int>,std::list<std::shared_ptr<int>>> ; "
++                           "TestList<std::shared_ptr<int>,std::list<std::shared_ptr<int>>> m_test ; "
++                           "class TestList<std::shared_ptr<int>,std::list<std::shared_ptr<int>>> { } ;";
++        ASSERT_EQUALS(exp, tok(code));
++    }
++
+     void template_specialization_1() {  // #7868 - template specialization template <typename T> struct S<C<T>> {..};
+         const char code[] = "template <typename T> struct C {};\n"
+                             "template <typename T> struct S {a};\n"
