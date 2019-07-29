@@ -3,7 +3,7 @@
 
 Name:           cppcheck
 Version:        1.88
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
