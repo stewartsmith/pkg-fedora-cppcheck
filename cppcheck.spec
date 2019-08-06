@@ -15,7 +15,8 @@ Patch0:         cppcheck-1.88-tinyxml.patch
 Patch1:         cppcheck-1.88-translations.patch
 # Set location of config files
 Patch2:         cppcheck-1.87-cfgdir.patch
-# Select python2 explicitly
+# Select python2 explicitly because htmlreport/README.txt says it's
+# implemented using Python2.7. Without it the package fails to build on F30.
 Patch3:         cppcheck-1.85-htmlreport-python2.patch
 
 # BZ #1733663
