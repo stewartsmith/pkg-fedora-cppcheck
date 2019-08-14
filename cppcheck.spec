@@ -15,9 +15,8 @@ Patch0:         cppcheck-1.88-tinyxml.patch
 Patch1:         cppcheck-1.88-translations.patch
 # Set location of config files
 Patch2:         cppcheck-1.87-cfgdir.patch
-# Select python2 explicitly because htmlreport/README.txt says it's
-# implemented using Python2.7. Without it the package fails to build on F30.
-Patch3:         cppcheck-1.85-htmlreport-python2.patch
+# Select python3 explicitly
+Patch3:         cppcheck-1.88-htmlreport-python3.patch
 
 # BZ #1733663
 Patch4:         https://github.com/danmar/cppcheck/pull/1939.patch
@@ -68,7 +67,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 # RHEL packages aren't versioned
 Requires:       python-pygments
 %else
-Requires:       python2-pygments
+Requires:       python3-pygments
 %endif
 
 %description htmlreport
@@ -80,7 +79,7 @@ from xml files first generated using cppcheck.
 %patch0 -p1 -b .tinyxml
 %patch1 -p1 -b .translations
 %patch2 -p1 -b .cfgdir
-%patch3 -p1 -b .python2
+%patch3 -p1 -b .python3
 %patch4 -p1 -b .bz1733663a
 %patch5 -p1 -b .bz1733663b
 # Make sure bundled tinyxml is not used
@@ -140,6 +139,9 @@ cd objdir-%{_target_platform}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Wed Aug 14 2019 Susi Lehtola <jussilehtola@redhat.com> - 1.89-5
+- Switch to python3 in htmlreport (BZ #1737972).
+
 * Mon Jul 29 2019 Susi Lehtola <jussilehtola@redhat.com> - 1.89-4
 - Second patch for another issue in BZ #1733663.
 
