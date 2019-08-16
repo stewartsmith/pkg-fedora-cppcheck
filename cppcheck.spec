@@ -3,7 +3,7 @@
 
 Name:           cppcheck
 Version:        1.88
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
@@ -139,6 +139,9 @@ cd objdir-%{_target_platform}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Fri Aug 16 2019 Susi Lehtola <susi.lehtola@iki.fi> - 1.88-5
+- rebuilt
+
 * Wed Aug 14 2019 Susi Lehtola <jussilehtola@redhat.com> - 1.89-5
 - Switch to python3 in htmlreport (BZ #1737972).
 
