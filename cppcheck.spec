@@ -2,8 +2,8 @@
 %global gui 1
 
 Name:           cppcheck
-Version:        1.88
-Release:        5%{?dist}
+Version:        1.89
+Release:        1%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
@@ -12,16 +12,13 @@ Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.
 # Use system tinyxml2
 Patch0:         cppcheck-1.88-tinyxml.patch
 # Fix location of translations
-Patch1:         cppcheck-1.88-translations.patch
+Patch1:         cppcheck-1.89-translations.patch
 # Set location of config files
 Patch2:         cppcheck-1.87-cfgdir.patch
 # Select python3 explicitly
 Patch3:         cppcheck-1.88-htmlreport-python3.patch
-
-# BZ #1733663
-Patch4:         https://github.com/danmar/cppcheck/pull/1939.patch
-# BZ #1733663
-Patch5:         https://github.com/danmar/cppcheck/pull/1943.patch
+# Fixup missing </para> in manual
+Patch4:         cppcheck-1.89-manual.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  pcre-devel
@@ -80,8 +77,7 @@ from xml files first generated using cppcheck.
 %patch1 -p1 -b .translations
 %patch2 -p1 -b .cfgdir
 %patch3 -p1 -b .python3
-%patch4 -p1 -b .bz1733663a
-%patch5 -p1 -b .bz1733663b
+%patch4 -p1 -b .manual
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
 
@@ -96,7 +92,7 @@ xsltproc --nonet -o man/manual.html \
 mkdir objdir-%{_target_platform}
 cd objdir-%{_target_platform}
 # Upstream doesn't support shared libraries (unversioned solib)
-%cmake .. -DCMAKE_BUILD_TYPE=Release -DHAVE_RULES=1 -DBUILD_GUI=%{gui} -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=1 -DCFGDIR=%{_datadir}/Cppcheck
+%cmake .. -DCMAKE_BUILD_TYPE=Release -DMATCHCOMPILER=yes -DHAVE_RULES=yes -DBUILD_GUI=%{gui} -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=yes -DFILESDIR=%{_datadir}/Cppcheck
 # SMP make doesn't seem to work
 make cppcheck
 
@@ -139,6 +135,9 @@ cd objdir-%{_target_platform}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Sat Dec 07 2019 Steve Grubb <sgrubb@redhat.com> - 1.89-1
+- New upstream release 1.89
+
 * Fri Aug 16 2019 Susi Lehtola <susi.lehtola@iki.fi> - 1.88-5
 - rebuilt
 
