@@ -3,7 +3,7 @@
 
 Name:           cppcheck
 Version:        1.89
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
@@ -91,6 +91,9 @@ xsltproc --nonet -o man/manual.html \
 # Binaries
 mkdir objdir-%{_target_platform}
 cd objdir-%{_target_platform}
+# Add -fsigned-char to CXXFLAGS, to make all tests pass also on armv7hl
+# aarch64 ppc64le s390x, See https://trac.cppcheck.net/ticket/9359
+export CXXFLAGS="$RPM_OPT_FLAGS -fsigned-char" 
 # Upstream doesn't support shared libraries (unversioned solib)
 %cmake .. -DCMAKE_BUILD_TYPE=Release -DMATCHCOMPILER=yes -DHAVE_RULES=yes -DBUILD_GUI=%{gui} -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=yes -DFILESDIR=%{_datadir}/Cppcheck
 # SMP make doesn't seem to work
@@ -135,6 +138,10 @@ cd objdir-%{_target_platform}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Thu Dec 12 2019 Steve Grubb <sgrubb@redhat.com> - 1.89-2
+- Add "-fsigned-char" to CXXFLAGS, to make tests pass
+- https://trac.cppcheck.net/ticket/9359
+
 * Sat Dec 07 2019 Steve Grubb <sgrubb@redhat.com> - 1.89-1
 - New upstream release 1.89
 
