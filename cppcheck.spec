@@ -148,13 +148,13 @@ cd objdir-%{_target_platform}/bin
 * Fri Aug 16 2019 Susi Lehtola <susi.lehtola@iki.fi> - 1.88-5
 - rebuilt
 
-* Wed Aug 14 2019 Susi Lehtola <jussilehtola@redhat.com> - 1.89-5
+* Wed Aug 14 2019 Susi Lehtola <jussilehtola@redhat.com> - 1.88-5
 - Switch to python3 in htmlreport (BZ #1737972).
 
-* Mon Jul 29 2019 Susi Lehtola <jussilehtola@redhat.com> - 1.89-4
+* Mon Jul 29 2019 Susi Lehtola <jussilehtola@redhat.com> - 1.88-4
 - Second patch for another issue in BZ #1733663.
 
-* Sat Jul 27 2019 Susi Lehtola <jussilehtola@redhat.com> - 1.89-3
+* Sat Jul 27 2019 Susi Lehtola <jussilehtola@redhat.com> - 1.88-3
 - Fix BZ #1733663.
 
 * Wed Jul 24 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.88-2
