@@ -26,7 +26,7 @@ diff -urp cppcheck-1.89.orig/gui/translationhandler.cpp cppcheck-1.89/gui/transl
 -
 -        else
 -            translationFile = appPath + "/" + mTranslations[index].mFilename + ".qm";
-+	QString translationFile("/usr/share/CppCheck/lang/" + mTranslations[index].mFilename + ".qm");
++	QString translationFile("/usr/share/Cppcheck/lang/" + mTranslations[index].mFilename + ".qm");
  
          if (!mTranslator->load(translationFile) && !failure) {
              //If it failed, lets check if the default file exists

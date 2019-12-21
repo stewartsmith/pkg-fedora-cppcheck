@@ -2,28 +2,25 @@
 %global gui 1
 
 Name:           cppcheck
-Version:        1.89
-Release:        2%{?dist}
+Version:        1.90
+Release:        1%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 
 # Use system tinyxml2
-Patch0:         cppcheck-1.88-tinyxml.patch
+Patch0:         cppcheck-1.90-tinyxml.patch
 # Fix location of translations
 Patch1:         cppcheck-1.89-translations.patch
-# Set location of config files
-Patch2:         cppcheck-1.87-cfgdir.patch
 # Select python3 explicitly
-Patch3:         cppcheck-1.88-htmlreport-python3.patch
-# Fixup missing </para> in manual
-Patch4:         cppcheck-1.89-manual.patch
+Patch2:         cppcheck-1.88-htmlreport-python3.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  pcre-devel
 BuildRequires:  docbook-style-xsl
 BuildRequires:  libxslt
+BuildRequires:  pandoc
 BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
 BuildRequires:  tinyxml2-devel >= 2.1.0
@@ -75,25 +72,19 @@ from xml files first generated using cppcheck.
 %setup -q
 %patch0 -p1 -b .tinyxml
 %patch1 -p1 -b .translations
-%patch2 -p1 -b .cfgdir
-%patch3 -p1 -b .python3
-%patch4 -p1 -b .manual
+%patch2 -p1 -b .python3
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
 
 %build
 # Manuals
-make DB2MAN=%{_datadir}/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl man 
-xsltproc --nonet -o man/manual.html \
-    %{_datadir}/sgml/docbook/xsl-stylesheets/xhtml/docbook.xsl \
-    man/manual.docbook
+make DB2MAN=%{_datadir}/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl man
+pandoc man/manual.md -o man/manual.html -s --number-sections --toc
+pandoc man/reference-cfg-format.md -o man/reference-cfg-format.html -s --number-sections --toc
 
 # Binaries
 mkdir objdir-%{_target_platform}
 cd objdir-%{_target_platform}
-# Add -fsigned-char to CXXFLAGS, to make all tests pass also on armv7hl
-# aarch64 ppc64le s390x, See https://trac.cppcheck.net/ticket/9359
-export CXXFLAGS="$RPM_OPT_FLAGS -fsigned-char" 
 # Upstream doesn't support shared libraries (unversioned solib)
 %cmake .. -DCMAKE_BUILD_TYPE=Release -DMATCHCOMPILER=yes -DHAVE_RULES=yes -DBUILD_GUI=%{gui} -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=yes -DFILESDIR=%{_datadir}/Cppcheck
 # SMP make doesn't seem to work
@@ -120,7 +111,8 @@ cd objdir-%{_target_platform}/bin
 ./testrunner -g -q
 
 %files
-%doc AUTHORS COPYING man/manual.html
+%doc AUTHORS man/manual.html man/reference-cfg-format.html
+%license COPYING
 %{_datadir}/Cppcheck/
 %{_bindir}/cppcheck
 %{_mandir}/man1/cppcheck.1*
@@ -138,6 +130,9 @@ cd objdir-%{_target_platform}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Sat Dec 21 2019 Wolfgang Stöggl <c72578@yahoo.de> - 1.90-1
+- New upstream version 1.90
+
 * Thu Dec 12 2019 Steve Grubb <sgrubb@redhat.com> - 1.89-2
 - Add "-fsigned-char" to CXXFLAGS, to make tests pass
 - https://trac.cppcheck.net/ticket/9359
