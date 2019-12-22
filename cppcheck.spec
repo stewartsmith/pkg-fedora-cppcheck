@@ -23,7 +23,6 @@ BuildRequires:  pcre-devel
 BuildRequires:  docbook-style-xsl
 BuildRequires:  libxslt
 BuildRequires:  pandoc
-BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
 BuildRequires:  tinyxml2-devel >= 2.1.0
 BuildRequires:  zlib-devel
@@ -31,12 +30,14 @@ BuildRequires:  zlib-devel
 %if %{gui}
 %if 0%{?rhel} == 7
 # no qt5-devel metapackage!
-BuildRequires: qt5-qtbase-devel
-BuildRequires: qt5-linguist
-BuildRequires: python-devel
+BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-linguist
+BuildRequires:  python-devel
+BuildRequires:  cmake3
 %else
 BuildRequires:  qt5-devel
 BuildRequires:  python3-devel
+BuildRequires:  cmake
 %endif
 %else
 Obsoletes:      %{name}-gui < %{version}-%{release}
@@ -94,7 +95,11 @@ pandoc man/reference-cfg-format.md -o man/reference-cfg-format.html -s --number-
 mkdir objdir-%{_target_platform}
 cd objdir-%{_target_platform}
 # Upstream doesn't support shared libraries (unversioned solib)
+%if 0%{?rhel} == 7
+%cmake3 .. -DCMAKE_BUILD_TYPE=Release -DMATCHCOMPILER=yes -DHAVE_RULES=yes -DBUILD_GUI=%{gui} -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=yes -DFILESDIR=%{_datadir}/Cppcheck
+%else
 %cmake .. -DCMAKE_BUILD_TYPE=Release -DMATCHCOMPILER=yes -DHAVE_RULES=yes -DBUILD_GUI=%{gui} -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=yes -DFILESDIR=%{_datadir}/Cppcheck
+%endif
 # SMP make doesn't seem to work
 make cppcheck
 
