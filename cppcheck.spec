@@ -3,7 +3,7 @@
 
 Name:           cppcheck
 Version:        1.90
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
@@ -15,6 +15,8 @@ Patch0:         cppcheck-1.90-tinyxml.patch
 Patch1:         cppcheck-1.89-translations.patch
 # Select python3 explicitly
 Patch2:         cppcheck-1.88-htmlreport-python3.patch
+# for RHEL7 we still have python2
+Patch3:         cppcheck-1.90-htmlreport-python2.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  pcre-devel
@@ -31,8 +33,10 @@ BuildRequires:  zlib-devel
 # no qt5-devel metapackage!
 BuildRequires: qt5-qtbase-devel
 BuildRequires: qt5-linguist
+BuildRequires: python-devel
 %else
 BuildRequires:  qt5-devel
+BuildRequires:  python3-devel
 %endif
 %else
 Obsoletes:      %{name}-gui < %{version}-%{release}
@@ -57,7 +61,7 @@ This package contains the graphical user interface for cppcheck.
 %package htmlreport
 Summary:        HTML reporting for cppcheck
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-%if 0%{?rhel} > 0 && 0%{?rhel} < 8
+%if 0%{?rhel} == 7
 # RHEL packages aren't versioned
 Requires:       python-pygments
 %else
@@ -72,7 +76,11 @@ from xml files first generated using cppcheck.
 %setup -q
 %patch0 -p1 -b .tinyxml
 %patch1 -p1 -b .translations
+%if 0%{?rhel} == 7
+%patch3 -p1 -b .python2
+%else
 %patch2 -p1 -b .python3
+%endif
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
 
@@ -130,6 +138,9 @@ cd objdir-%{_target_platform}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Sat Dec 21 2019 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.90-2
+- Adaptations to build also on EPEL 7.
+
 * Sat Dec 21 2019 Wolfgang Stöggl <c72578@yahoo.de> - 1.90-1
 - New upstream version 1.90
 
