@@ -3,7 +3,7 @@
 
 Name:           cppcheck
 Version:        1.90
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
@@ -143,6 +143,9 @@ cd objdir-%{_target_platform}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Mon Dec 23 2019 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.90-3
+- Fix typo in CMake flag (Stöggl's pull request #3).
+
 * Sat Dec 21 2019 Susi Lehtola <jussilehtola@fedoraproject.org> - 1.90-2
 - Adaptations to build also on EPEL 7.
 
