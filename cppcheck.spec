@@ -96,9 +96,9 @@ mkdir objdir-%{_target_platform}
 cd objdir-%{_target_platform}
 # Upstream doesn't support shared libraries (unversioned solib)
 %if 0%{?rhel} == 7
-%cmake3 .. -DCMAKE_BUILD_TYPE=Release -DMATCHCOMPILER=yes -DHAVE_RULES=yes -DBUILD_GUI=%{gui} -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=yes -DFILESDIR=%{_datadir}/Cppcheck
+%cmake3 .. -DCMAKE_BUILD_TYPE=Release -DUSE_MATCHCOMPILER=yes -DHAVE_RULES=yes -DBUILD_GUI=%{gui} -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=yes -DFILESDIR=%{_datadir}/Cppcheck
 %else
-%cmake .. -DCMAKE_BUILD_TYPE=Release -DMATCHCOMPILER=yes -DHAVE_RULES=yes -DBUILD_GUI=%{gui} -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=yes -DFILESDIR=%{_datadir}/Cppcheck
+%cmake .. -DCMAKE_BUILD_TYPE=Release -DUSE_MATCHCOMPILER=yes -DHAVE_RULES=yes -DBUILD_GUI=%{gui} -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=yes -DFILESDIR=%{_datadir}/Cppcheck
 %endif
 # SMP make doesn't seem to work
 make cppcheck
