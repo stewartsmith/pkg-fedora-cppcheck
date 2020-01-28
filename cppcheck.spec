@@ -3,7 +3,7 @@
 
 Name:           cppcheck
 Version:        1.90
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
@@ -137,6 +137,9 @@ cd objdir-%{_target_platform}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.90-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
 * Tue Dec 24 2019 Wolfgang Stöggl <c72578@yahoo.de> - 1.90-4
 - Use python3 on EPEL7
 
