@@ -15,6 +15,7 @@ Patch0:         cppcheck-1.90-tinyxml.patch
 Patch1:         cppcheck-1.89-translations.patch
 # Select python3 explicitly
 Patch2:         cppcheck-1.88-htmlreport-python3.patch
+Patch3:         https://github.com/danmar/cppcheck/commit/809a769.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  pcre-devel
@@ -24,16 +25,15 @@ BuildRequires:  pandoc
 BuildRequires:  desktop-file-utils
 BuildRequires:  tinyxml2-devel >= 2.1.0
 BuildRequires:  zlib-devel
+BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-linguist
 
 %if %{gui}
 %if 0%{?rhel} == 7
 # no qt5-devel metapackage!
-BuildRequires:  qt5-qtbase-devel
-BuildRequires:  qt5-linguist
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  cmake3
 %else
-BuildRequires:  qt5-devel
 BuildRequires:  python3-devel
 BuildRequires:  cmake
 %endif
@@ -76,6 +76,7 @@ from xml files first generated using cppcheck.
 %patch0 -p1 -b .tinyxml
 %patch1 -p1 -b .translations
 %patch2 -p1 -b .python3
+%patch3 -p1 -b .cmake
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
 
