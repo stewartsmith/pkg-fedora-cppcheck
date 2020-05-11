@@ -2,8 +2,8 @@
 %global gui 1
 
 Name:           cppcheck
-Version:        1.90
-Release:        5%{?dist}
+Version:        2.0
+Release:        1%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
@@ -137,6 +137,9 @@ cd objdir-%{_target_platform}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Mon May 11 2020 Susi Lehtola <jussilehtola@fedoraproject.org> - 2.0-1
+- Update to 2.0.
+
 * Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.90-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
