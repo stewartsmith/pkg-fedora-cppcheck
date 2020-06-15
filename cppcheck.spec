@@ -2,7 +2,7 @@
 %global gui 1
 
 Name:           cppcheck
-Version:        2.0
+Version:        2.1
 Release:        1%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
@@ -10,12 +10,11 @@ URL:            http://cppcheck.wiki.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 
 # Use system tinyxml2
-Patch0:         cppcheck-1.90-tinyxml.patch
+Patch0:         cppcheck-2.1-tinyxml.patch
 # Fix location of translations
 Patch1:         cppcheck-1.89-translations.patch
 # Select python3 explicitly
 Patch2:         cppcheck-1.88-htmlreport-python3.patch
-Patch3:         https://github.com/danmar/cppcheck/commit/809a769.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  pcre-devel
@@ -76,7 +75,6 @@ from xml files first generated using cppcheck.
 %patch0 -p1 -b .tinyxml
 %patch1 -p1 -b .translations
 %patch2 -p1 -b .python3
-%patch3 -p1 -b .cmake
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
 
@@ -138,6 +136,9 @@ cd objdir-%{_target_platform}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Mon Jun 15 2020 Susi Lehtola <jussilehtola@fedoraproject.org> - 2.1-1
+- Update to 2.1.
+
 * Mon May 11 2020 Susi Lehtola <jussilehtola@fedoraproject.org> - 2.0-1
 - Update to 2.0.
 
