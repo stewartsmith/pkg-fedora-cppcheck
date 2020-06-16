@@ -3,7 +3,7 @@
 
 Name:           cppcheck
 Version:        2.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
@@ -28,13 +28,13 @@ BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-linguist
 
 %if %{gui}
-%if 0%{?rhel} == 7
-# no qt5-devel metapackage!
+%if 0%{?rhel} >= 7
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  cmake3
 %else
 BuildRequires:  python3-devel
 BuildRequires:  cmake
+BuildRequires:  z3-devel >= 4.7.1
 %endif
 %else
 Obsoletes:      %{name}-gui < %{version}-%{release}
@@ -59,7 +59,7 @@ This package contains the graphical user interface for cppcheck.
 %package htmlreport
 Summary:        HTML reporting for cppcheck
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-%if 0%{?rhel} == 7
+%if 0%{?rhel} >= 7
 # RHEL packages aren't versioned
 Requires:       python%{python3_pkgversion}-pygments
 %else
@@ -88,10 +88,10 @@ pandoc man/reference-cfg-format.md -o man/reference-cfg-format.html -s --number-
 mkdir objdir-%{_target_platform}
 cd objdir-%{_target_platform}
 # Upstream doesn't support shared libraries (unversioned solib)
-%if 0%{?rhel} == 7
+%if 0%{?rhel} >= 7
 %cmake3 .. -DCMAKE_BUILD_TYPE=Release -DUSE_MATCHCOMPILER=yes -DHAVE_RULES=yes -DBUILD_GUI=%{gui} -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=yes -DFILESDIR=%{_datadir}/Cppcheck
 %else
-%cmake .. -DCMAKE_BUILD_TYPE=Release -DUSE_MATCHCOMPILER=yes -DHAVE_RULES=yes -DBUILD_GUI=%{gui} -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=yes -DFILESDIR=%{_datadir}/Cppcheck
+%cmake .. -DCMAKE_BUILD_TYPE=Release -DUSE_MATCHCOMPILER=yes -DUSE_Z3=yes -DHAVE_RULES=yes -DBUILD_GUI=%{gui} -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=yes -DFILESDIR=%{_datadir}/Cppcheck
 %endif
 # SMP make doesn't seem to work
 make cppcheck
@@ -136,6 +136,9 @@ cd objdir-%{_target_platform}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Tue Jun 16 2020 Wolfgang Stöggl <c72578@yahoo.de> - 2.1-2
+- Enable Z3 on Fedora builds.
+
 * Mon Jun 15 2020 Susi Lehtola <jussilehtola@fedoraproject.org> - 2.1-1
 - Update to 2.1.
 
