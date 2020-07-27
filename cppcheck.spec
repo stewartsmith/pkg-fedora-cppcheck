@@ -3,7 +3,7 @@
 
 Name:           cppcheck
 Version:        2.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
@@ -122,6 +122,9 @@ cd objdir-%{_target_platform}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Mon Jul 27 2020 Fedora Release Engineering <releng@fedoraproject.org> - 2.1-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
 * Tue Jun 16 2020 Susi Lehtola <jussilehtola@fedoraproject.org> - 2.1-3
 - Drop EPEL specifics since cppcheck is included in RHEL8.
 
