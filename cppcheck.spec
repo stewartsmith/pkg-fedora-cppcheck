@@ -3,7 +3,7 @@
 
 Name:           cppcheck
 Version:        2.1
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
@@ -21,16 +21,16 @@ BuildRequires:  pcre-devel
 BuildRequires:  docbook-style-xsl
 BuildRequires:  libxslt
 BuildRequires:  pandoc
+BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
 BuildRequires:  tinyxml2-devel >= 2.1.0
 BuildRequires:  zlib-devel
-BuildRequires:  qt5-qtbase-devel
-BuildRequires:  qt5-linguist
+BuildRequires:  python3-devel
+BuildRequires:  z3-devel >= 4.7.1
 
 %if %{gui}
-BuildRequires:  python3-devel
-BuildRequires:  cmake
-BuildRequires:  z3-devel >= 4.7.1
+BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-linguist
 %else
 Obsoletes:      %{name}-gui < %{version}-%{release}
 %endif
@@ -75,16 +75,13 @@ pandoc man/manual.md -o man/manual.html -s --number-sections --toc
 pandoc man/reference-cfg-format.md -o man/reference-cfg-format.html -s --number-sections --toc
 
 # Binaries
-mkdir objdir-%{_target_platform}
-cd objdir-%{_target_platform}
 # Upstream doesn't support shared libraries (unversioned solib)
-%cmake .. -DCMAKE_BUILD_TYPE=Release -DUSE_MATCHCOMPILER=yes -DUSE_Z3=yes -DHAVE_RULES=yes -DBUILD_GUI=%{gui} -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=yes -DFILESDIR=%{_datadir}/Cppcheck
-# SMP make doesn't seem to work
-make cppcheck
+%cmake -DCMAKE_BUILD_TYPE=Release -DUSE_MATCHCOMPILER=yes -DUSE_Z3=yes -DHAVE_RULES=yes -DBUILD_GUI=%{gui} -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=yes -DFILESDIR=%{_datadir}/Cppcheck
+%cmake_build
 
 %install
 rm -rf %{buildroot}
-make -C objdir-%{_target_platform} DESTDIR=%{buildroot} install
+%cmake_install
 install -D -p -m 644 cppcheck.1 %{buildroot}%{_mandir}/man1/cppcheck.1
 
 %if %{gui}
@@ -99,7 +96,7 @@ install -D -p -m 755 htmlreport/cppcheck-htmlreport %{buildroot}%{_bindir}/cppch
 
 
 %check
-cd objdir-%{_target_platform}/bin
+cd %{_vpath_builddir}/bin
 ./testrunner -g -q
 
 %files
@@ -122,6 +119,9 @@ cd objdir-%{_target_platform}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Tue Aug 04 2020 Wolfgang Stöggl <c72578@yahoo.de> - 2.1-6
+- Fix FTBFS #1863368
+
 * Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 2.1-5
 - Second attempt - Rebuilt for
   https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
