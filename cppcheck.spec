@@ -1,9 +1,6 @@
-# Gui built in all branches
-%global gui 1
-
 Name:           cppcheck
 Version:        2.1
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
@@ -27,13 +24,9 @@ BuildRequires:  tinyxml2-devel >= 2.1.0
 BuildRequires:  zlib-devel
 BuildRequires:  python3-devel
 BuildRequires:  z3-devel >= 4.7.1
-
-%if %{gui}
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-linguist
-%else
-Obsoletes:      %{name}-gui < %{version}-%{release}
-%endif
+
 
 %description
 Cppcheck is a static analysis tool for C/C++ code. Unlike C/C++
@@ -42,14 +35,12 @@ errors in the code. Cppcheck primarily detects the types of bugs that
 the compilers normally do not detect. The goal is to detect only real
 errors in the code (i.e. have zero false positives).
 
-%if %{gui}
 %package gui
 Summary:        Graphical user interface for cppcheck
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description gui
 This package contains the graphical user interface for cppcheck.
-%endif
 
 %package htmlreport
 Summary:        HTML reporting for cppcheck
@@ -76,24 +67,20 @@ pandoc man/reference-cfg-format.md -o man/reference-cfg-format.html -s --number-
 
 # Binaries
 # Upstream doesn't support shared libraries (unversioned solib)
-%cmake -DCMAKE_BUILD_TYPE=Release -DUSE_MATCHCOMPILER=yes -DUSE_Z3=yes -DHAVE_RULES=yes -DBUILD_GUI=%{gui} -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=yes -DFILESDIR=%{_datadir}/Cppcheck
+%cmake -DCMAKE_BUILD_TYPE=Release -DUSE_MATCHCOMPILER=yes -DUSE_Z3=yes -DHAVE_RULES=yes -DBUILD_GUI=1 -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=yes -DFILESDIR=%{_datadir}/Cppcheck
 %cmake_build
 
 %install
 rm -rf %{buildroot}
 %cmake_install
 install -D -p -m 644 cppcheck.1 %{buildroot}%{_mandir}/man1/cppcheck.1
-
-%if %{gui}
 # Install desktop file
 desktop-file-validate %{buildroot}%{_datadir}/applications/cppcheck-gui.desktop
 # Install logo
 install -D -p -m 644 gui/cppcheck-gui.png %{buildroot}%{_datadir}/pixmaps/cppcheck-gui.png
-%endif
 
 # Install htmlreport
 install -D -p -m 755 htmlreport/cppcheck-htmlreport %{buildroot}%{_bindir}/cppcheck-htmlreport
-
 
 %check
 cd %{_vpath_builddir}/bin
@@ -106,19 +93,20 @@ cd %{_vpath_builddir}/bin
 %{_bindir}/cppcheck
 %{_mandir}/man1/cppcheck.1*
 
-%if %{gui}
 %files gui
 %{_bindir}/cppcheck-gui
 %{_datadir}/applications/cppcheck-gui.desktop
 %{_datadir}/pixmaps/cppcheck-gui.png
 %{_datadir}/icons/hicolor/64x64/apps/cppcheck-gui.png
 %{_datadir}/icons/hicolor/scalable/apps/cppcheck-gui.svg
-%endif
 
 %files htmlreport
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Tue Aug 18 2020 Susi Lehtola <jussilehtola@fedoraproject.org> - 2.1-7
+- Gui package is always built.
+
 * Tue Aug 04 2020 Wolfgang Stöggl <c72578@yahoo.de> - 2.1-6
 - Fix FTBFS #1863368
 
