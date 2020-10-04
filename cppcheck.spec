@@ -1,17 +1,19 @@
 Name:           cppcheck
-Version:        2.1
-Release:        7%{?dist}
+Version:        2.2
+Release:        1%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 
 # Use system tinyxml2
-Patch0:         cppcheck-2.1-tinyxml.patch
+Patch0:         cppcheck-2.2-tinyxml.patch
 # Fix location of translations
-Patch1:         cppcheck-1.89-translations.patch
+Patch1:         cppcheck-2.2-translations.patch
 # Select python3 explicitly
 Patch2:         cppcheck-1.88-htmlreport-python3.patch
+# https://github.com/danmar/cppcheck/commit/b052843
+Patch3:         cppcheck-2.2-exprengine.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  pcre-devel
@@ -25,6 +27,7 @@ BuildRequires:  zlib-devel
 BuildRequires:  python3-devel
 BuildRequires:  z3-devel >= 4.7.1
 BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-qttools-devel
 BuildRequires:  qt5-linguist
 
 
@@ -56,6 +59,7 @@ from xml files first generated using cppcheck.
 %patch0 -p1 -b .tinyxml
 %patch1 -p1 -b .translations
 %patch2 -p1 -b .python3
+%patch3 -p1 -b .exprengine
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
 
@@ -104,6 +108,9 @@ cd %{_vpath_builddir}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Sun Oct 04 2020 Wolfgang Stöggl <c72578@yahoo.de> - 2.2-1
+- Update to 2.2.
+
 * Tue Aug 18 2020 Susi Lehtola <jussilehtola@fedoraproject.org> - 2.1-7
 - Gui package is always built.
 
