@@ -1,6 +1,8 @@
+%undefine __cmake_in_source_build
+
 Name:           cppcheck
 Version:        2.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
@@ -14,6 +16,9 @@ Patch1:         cppcheck-2.2-translations.patch
 Patch2:         cppcheck-1.88-htmlreport-python3.patch
 # https://github.com/danmar/cppcheck/commit/b052843
 Patch3:         cppcheck-2.2-exprengine.patch
+# Look for Qt online-help file also in FILESDIR
+# https://github.com/danmar/cppcheck/commit/df9f6f3
+Patch4:         cppcheck-2.2-online-help.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  pcre-devel
@@ -60,8 +65,12 @@ from xml files first generated using cppcheck.
 %patch1 -p1 -b .translations
 %patch2 -p1 -b .python3
 %patch3 -p1 -b .exprengine
+%patch4 -p1 -b .online-help
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
+# Generate the Qt online-help file
+cd gui/help
+qhelpgenerator-qt5 online-help.qhcp -o online-help.qhc
 
 %build
 # Manuals
@@ -82,6 +91,9 @@ install -D -p -m 644 cppcheck.1 %{buildroot}%{_mandir}/man1/cppcheck.1
 desktop-file-validate %{buildroot}%{_datadir}/applications/cppcheck-gui.desktop
 # Install logo
 install -D -p -m 644 gui/cppcheck-gui.png %{buildroot}%{_datadir}/pixmaps/cppcheck-gui.png
+# Install the Qt online-help file
+install -D -p -m 644 gui/help/online-help.qhc %{buildroot}%{_datadir}/Cppcheck/help/online-help.qhc
+install -D -p -m 644 gui/help/online-help.qch %{buildroot}%{_datadir}/Cppcheck/help/online-help.qch
 
 # Install htmlreport
 install -D -p -m 755 htmlreport/cppcheck-htmlreport %{buildroot}%{_bindir}/cppcheck-htmlreport
@@ -108,6 +120,9 @@ cd %{_vpath_builddir}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Sun Oct 11 2020 Wolfgang Stöggl <c72578@yahoo.de> - 2.2-2
+- Fix Helpfile 'online-help.qhc' was not found
+
 * Sun Oct 04 2020 Wolfgang Stöggl <c72578@yahoo.de> - 2.2-1
 - Update to 2.2.
 
