@@ -19,6 +19,8 @@ Patch3:         cppcheck-2.2-exprengine.patch
 # Look for Qt online-help file also in FILESDIR
 # https://github.com/danmar/cppcheck/commit/df9f6f3
 Patch4:         cppcheck-2.2-online-help.patch
+# Fix for missing #include with gcc-11
+Patch5:         cppcheck-gcc11.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  pcre-devel
@@ -66,6 +68,7 @@ from xml files first generated using cppcheck.
 %patch2 -p1 -b .python3
 %patch3 -p1 -b .exprengine
 %patch4 -p1 -b .online-help
+%patch5 -p1 -b .gcc11
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
 # Generate the Qt online-help file
