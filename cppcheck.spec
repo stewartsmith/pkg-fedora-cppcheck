@@ -2,7 +2,7 @@
 
 Name:           cppcheck
 Version:        2.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
@@ -123,6 +123,9 @@ cd %{_vpath_builddir}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Tue Oct 13 2020 Jeff Law <law@redhat.com> - 2.2-3
+- Fix missing #include for gcc-11
+
 * Sun Oct 11 2020 Wolfgang Stöggl <c72578@yahoo.de> - 2.2-2
 - Fix Helpfile 'online-help.qhc' was not found
 
