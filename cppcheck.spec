@@ -73,7 +73,7 @@ from xml files first generated using cppcheck.
 rm -r externals/tinyxml
 # Generate the Qt online-help file
 cd gui/help
-qhelpgenerator-qt5 online-help.qhcp -o online-help.qhc
+TZ=UTC qhelpgenerator-qt5 online-help.qhcp -o online-help.qhc
 
 %build
 # Manuals
