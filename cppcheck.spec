@@ -2,7 +2,7 @@
 
 Name:           cppcheck
 Version:        2.2
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
@@ -21,6 +21,8 @@ Patch3:         cppcheck-2.2-exprengine.patch
 Patch4:         cppcheck-2.2-online-help.patch
 # Fix for missing #include with gcc-11
 Patch5:         cppcheck-gcc11.patch
+# https://github.com/danmar/cppcheck/pull/2890
+Patch6:         cppcheck-2.2-online-help_q_readonly.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  pcre-devel
@@ -69,11 +71,12 @@ from xml files first generated using cppcheck.
 %patch3 -p1 -b .exprengine
 %patch4 -p1 -b .online-help
 %patch5 -p1 -b .gcc11
+%patch6 -p1 -b .online-help_q_readonly
 # Make sure bundled tinyxml is not used
 rm -r externals/tinyxml
 # Generate the Qt online-help file
 cd gui/help
-TZ=UTC qhelpgenerator-qt5 online-help.qhcp -o online-help.qhc
+qhelpgenerator-qt5 online-help.qhcp -o online-help.qhc
 
 %build
 # Manuals
@@ -122,13 +125,10 @@ cd %{_vpath_builddir}/bin
 %files htmlreport
 %{_bindir}/cppcheck-htmlreport
 
-%post
-# Adjust the timestamp of online-help.qch to the value expected by online-help.qhc
-# The rpm is built on servers using UTC. Get this UTC timestamp and apply it to the file under the local TZ
-# https://github.com/danmar/cppcheck/commit/9693940dadfd54bb0bac2549e1b2d6804be9a1a8#commitcomment-43482215
-touch -a -m -t $(TZ=UTC date -r /usr/share/Cppcheck/help/online-help.qch +%Y%m%d%H%M.%%S) /usr/share/Cppcheck/help/online-help.qch
-
 %changelog
+* Sun Nov 08 2020 Wolfgang Stöggl <c72578@yahoo.de> - 2.2-5
+- Add cppcheck-2.2-online-help_q_readonly.patch
+
 * Thu Oct 22 2020 Wolfgang Stöggl <c72578@yahoo.de> - 2.2-4
 - Fix missing Contents and Index in Qt online-help file
 
