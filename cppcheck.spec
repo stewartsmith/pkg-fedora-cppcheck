@@ -1,28 +1,19 @@
 %undefine __cmake_in_source_build
 
 Name:           cppcheck
-Version:        2.2
-Release:        5%{?dist}
+Version:        2.3
+Release:        1%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 
-# Use system tinyxml2
-Patch0:         cppcheck-2.2-tinyxml.patch
 # Fix location of translations
-Patch1:         cppcheck-2.2-translations.patch
+Patch0:         cppcheck-2.2-translations.patch
 # Select python3 explicitly
-Patch2:         cppcheck-1.88-htmlreport-python3.patch
-# https://github.com/danmar/cppcheck/commit/b052843
-Patch3:         cppcheck-2.2-exprengine.patch
-# Look for Qt online-help file also in FILESDIR
-# https://github.com/danmar/cppcheck/commit/df9f6f3
-Patch4:         cppcheck-2.2-online-help.patch
+Patch1:         cppcheck-1.88-htmlreport-python3.patch
 # Fix for missing #include with gcc-11
-Patch5:         cppcheck-gcc11.patch
-# https://github.com/danmar/cppcheck/pull/2890
-Patch6:         cppcheck-2.2-online-help_q_readonly.patch
+Patch2:         cppcheck-2.3-gcc11.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  pcre-devel
@@ -65,15 +56,11 @@ from xml files first generated using cppcheck.
 
 %prep
 %setup -q
-%patch0 -p1 -b .tinyxml
-%patch1 -p1 -b .translations
-%patch2 -p1 -b .python3
-%patch3 -p1 -b .exprengine
-%patch4 -p1 -b .online-help
-%patch5 -p1 -b .gcc11
-%patch6 -p1 -b .online-help_q_readonly
-# Make sure bundled tinyxml is not used
-rm -r externals/tinyxml
+%patch0 -p1 -b .translations
+%patch1 -p1 -b .python3
+%patch2 -p1 -b .gcc11
+# Make sure bundled tinyxml2 is not used
+rm -r externals/tinyxml2
 # Generate the Qt online-help file
 cd gui/help
 qhelpgenerator-qt5 online-help.qhcp -o online-help.qhc
@@ -86,7 +73,7 @@ pandoc man/reference-cfg-format.md -o man/reference-cfg-format.html -s --number-
 
 # Binaries
 # Upstream doesn't support shared libraries (unversioned solib)
-%cmake -DCMAKE_BUILD_TYPE=Release -DUSE_MATCHCOMPILER=yes -DUSE_Z3=yes -DHAVE_RULES=yes -DBUILD_GUI=1 -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=yes -DFILESDIR=%{_datadir}/Cppcheck
+%cmake -DCMAKE_BUILD_TYPE=Release -DUSE_MATCHCOMPILER=yes -DUSE_Z3=yes -DHAVE_RULES=yes -DBUILD_GUI=1 -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=yes -DFILESDIR=%{_datadir}/Cppcheck -DUSE_BUNDLED_TINYXML2=OFF
 %cmake_build
 
 %install
@@ -126,6 +113,9 @@ cd %{_vpath_builddir}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Sat Dec 05 2020 Wolfgang Stöggl <c72578@yahoo.de> - 2.3-1
+- Update to 2.3.
+
 * Sun Nov 08 2020 Wolfgang Stöggl <c72578@yahoo.de> - 2.2-5
 - Add cppcheck-2.2-online-help_q_readonly.patch
 
