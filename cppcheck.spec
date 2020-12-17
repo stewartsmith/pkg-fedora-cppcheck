@@ -29,6 +29,7 @@ BuildRequires:  z3-devel >= 4.7.1
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qttools-devel
 BuildRequires:  qt5-linguist
+BuildRequires: make
 
 
 %description
