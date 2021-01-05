@@ -114,7 +114,7 @@ cd %{_vpath_builddir}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
-* Tue Jan 05 Timm Bäder <tbaeder@redhat.com> - 2.3-2
+* Tue Jan 05 2021 Timm Bäder <tbaeder@redhat.com> - 2.3-2
 - Explicitly disable oss-fuzz
 
 * Sat Dec 05 2020 Wolfgang Stöggl <c72578@yahoo.de> - 2.3-1
