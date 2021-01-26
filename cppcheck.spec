@@ -2,7 +2,7 @@
 
 Name:           cppcheck
 Version:        2.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
@@ -114,6 +114,9 @@ cd %{_vpath_builddir}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 2.3-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
 * Tue Jan 05 2021 Timm Bäder <tbaeder@redhat.com> - 2.3-2
 - Explicitly disable oss-fuzz
 
