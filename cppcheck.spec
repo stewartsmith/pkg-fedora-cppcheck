@@ -14,6 +14,9 @@ Patch0:         cppcheck-2.2-translations.patch
 Patch1:         cppcheck-1.88-htmlreport-python3.patch
 # Fix for missing #include with gcc-11
 Patch2:         cppcheck-2.3-gcc11.patch
+# da1375c9a3f3 ("Fix issue 10024: FP: nullPointerRedundantCheck
+# when using a goto statement (#2947)")
+Patch3:         cppcheck-2.3-Fix-issue-10024-FP-nullPointerRedundantCheck-when-us.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  pcre-devel
@@ -60,6 +63,7 @@ from xml files first generated using cppcheck.
 %patch0 -p1 -b .translations
 %patch1 -p1 -b .python3
 %patch2 -p1 -b .gcc11
+%patch3 -p1 -b .nullptrcheck
 # Make sure bundled tinyxml2 is not used
 rm -r externals/tinyxml2
 # Generate the Qt online-help file
