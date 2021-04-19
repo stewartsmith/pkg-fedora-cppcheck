@@ -28,6 +28,7 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  tinyxml2-devel >= 2.1.0
 BuildRequires:  zlib-devel
 BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
 BuildRequires:  z3-devel >= 4.7.1
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qttools-devel
