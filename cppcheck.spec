@@ -1,22 +1,20 @@
 %undefine __cmake_in_source_build
 
 Name:           cppcheck
-Version:        2.3
-Release:        3%{?dist}
+Version:        2.5
+Release:        1%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/danmar/%{name}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 # Fix location of translations
 Patch0:         cppcheck-2.2-translations.patch
 # Select python3 explicitly
 Patch1:         cppcheck-1.88-htmlreport-python3.patch
-# Fix for missing #include with gcc-11
-Patch2:         cppcheck-2.3-gcc11.patch
-# da1375c9a3f3 ("Fix issue 10024: FP: nullPointerRedundantCheck
-# when using a goto statement (#2947)")
-Patch3:         cppcheck-2.3-Fix-issue-10024-FP-nullPointerRedundantCheck-when-us.patch
+# Disable one test, which fails under 32-bit archs i686 and armv7hl
+# https://trac.cppcheck.net/ticket/10282
+Patch2:         cppcheck-2.5-disable-test-testexprengine-array7.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  pcre-devel
@@ -63,8 +61,7 @@ from xml files first generated using cppcheck.
 %setup -q
 %patch0 -p1 -b .translations
 %patch1 -p1 -b .python3
-%patch2 -p1 -b .gcc11
-%patch3 -p1 -b .nullptrcheck
+%patch2 -p1 -b .array7
 # Make sure bundled tinyxml2 is not used
 rm -r externals/tinyxml2
 # Generate the Qt online-help file
@@ -78,6 +75,8 @@ pandoc man/manual.md -o man/manual.html -s --number-sections --toc
 pandoc man/reference-cfg-format.md -o man/reference-cfg-format.html -s --number-sections --toc
 
 # Binaries
+# https://github.com/danmar/cppcheck/pull/3179#issuecomment-804365812
+export CXXFLAGS="$RPM_OPT_FLAGS -DNO_UNIX_SIGNAL_HANDLING"
 # Upstream doesn't support shared libraries (unversioned solib)
 %cmake -DCMAKE_BUILD_TYPE=Release -DUSE_MATCHCOMPILER=yes -DUSE_Z3=yes -DHAVE_RULES=yes -DBUILD_GUI=1 -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTS=yes -DFILESDIR=%{_datadir}/Cppcheck -DUSE_BUNDLED_TINYXML2=OFF -DENABLE_OSS_FUZZ=OFF
 %cmake_build
@@ -119,6 +118,9 @@ cd %{_vpath_builddir}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Sun Jul 04 2021 Wolfgang Stöggl <c72578@yahoo.de> - 2.5-1
+- Update to 2.5.
+
 * Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 2.3-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 

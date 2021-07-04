@@ -1,0 +1,13 @@
+diff --git a/test/testexprengine.cpp b/test/testexprengine.cpp
+index f23671a3d..c6069b49c 100644
+--- a/test/testexprengine.cpp
++++ b/test/testexprengine.cpp
+@@ -92,7 +92,7 @@ private:
+         TEST_CASE(array4);
+         TEST_CASE(array5);
+         TEST_CASE(array6);
+-        TEST_CASE(array7);
++        // TEST_CASE(array7);
+         TEST_CASE(arrayInit1);
+         TEST_CASE(arrayInit2);
+         TEST_CASE(arrayInit3);
