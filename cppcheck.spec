@@ -2,7 +2,7 @@
 
 Name:           cppcheck
 Version:        2.5
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPLv3+
 URL:            http://cppcheck.wiki.sourceforge.net/
@@ -15,6 +15,9 @@ Patch1:         cppcheck-1.88-htmlreport-python3.patch
 # Disable one test, which fails under 32-bit archs i686 and armv7hl
 # https://trac.cppcheck.net/ticket/10282
 Patch2:         cppcheck-2.5-disable-test-testexprengine-array7.patch
+# Fix Failed to load translation for English (#1983599)
+# https://github.com/danmar/cppcheck/commit/8d5249e3b6cd892b283eba0369b33ec302c8fbe0
+Patch3:         cppcheck-2.5-fix_failed_to_load_translation_for_English.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  pcre-devel
@@ -62,6 +65,7 @@ from xml files first generated using cppcheck.
 %patch0 -p1 -b .translations
 %patch1 -p1 -b .python3
 %patch2 -p1 -b .array7
+%patch3 -p1 -b .en
 # Make sure bundled tinyxml2 is not used
 rm -r externals/tinyxml2
 # Generate the Qt online-help file
@@ -118,6 +122,9 @@ cd %{_vpath_builddir}/bin
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
+* Fri Jul 23 2021 Wolfgang Stöggl <c72578@yahoo.de> - 2.5-3
+- Fix Failed to load translation for English (#1983599)
+
 * Wed Jul 21 2021 Fedora Release Engineering <releng@fedoraproject.org> - 2.5-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
 

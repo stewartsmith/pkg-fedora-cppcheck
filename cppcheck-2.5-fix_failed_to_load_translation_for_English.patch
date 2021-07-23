@@ -1,0 +1,33 @@
+From 8d5249e3b6cd892b283eba0369b33ec302c8fbe0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Wolfgang=20St=C3=B6ggl?= <c72578@yahoo.de>
+Date: Fri, 23 Jul 2021 19:27:53 +0200
+Subject: [PATCH] Fix Failed to load translation for English (#3351)
+
+Upon the first start of cppcheck-gui, the following message appears,
+if the language of the OS is English:
+  Failed to load the user interface language:
+  Failed to load translation for language English from file
+  cppcheck_en.qm
+  The user interface language has been reset to English.
+
+- Update translationhandler.cpp and check if the language code starts
+  with "en". The code can be e.g. "en_US"
+---
+ gui/translationhandler.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/gui/translationhandler.cpp b/gui/translationhandler.cpp
+index e00829e2008..5c27eb4ec0c 100644
+--- a/gui/translationhandler.cpp
++++ b/gui/translationhandler.cpp
+@@ -86,8 +86,8 @@ bool TranslationHandler::setLanguage(const QString &code)
+     bool failure = false;
+     QString error;
+ 
+-    //If English is the language
+-    if (code == "en") {
++    //If English is the language. Code can be e.g. en_US
++    if (code.indexOf("en") == 0) {
+         //Just remove all extra translators
+         if (mTranslator) {
+             qApp->removeTranslator(mTranslator);
