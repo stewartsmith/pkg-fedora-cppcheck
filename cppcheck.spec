@@ -18,6 +18,7 @@ Patch2:         cppcheck-2.5-disable-test-testexprengine-array7.patch
 # Fix Failed to load translation for English (#1983599)
 # https://github.com/danmar/cppcheck/commit/8d5249e3b6cd892b283eba0369b33ec302c8fbe0
 Patch3:         cppcheck-2.5-fix_failed_to_load_translation_for_English.patch
+Patch4:         cppcheck-2.5-SIGSTKSZ.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  pcre-devel
@@ -66,6 +67,7 @@ from xml files first generated using cppcheck.
 %patch1 -p1 -b .python3
 %patch2 -p1 -b .array7
 %patch3 -p1 -b .en
+%patch4 -p1 -b .SIGSTKSZ
 # Make sure bundled tinyxml2 is not used
 rm -r externals/tinyxml2
 # Generate the Qt online-help file
